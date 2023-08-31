@@ -1,0 +1,10 @@
+---
+- name: Doing bad stuff...
+  hosts: domain_controller
+  tasks:
+    - name: Running Vulnerable-AD script 
+      ansible.windows.win_powershell: 
+        script: |
+          IEX((new-object net.webclient).downloadstring("https://raw.githubusercontent.com/wazehell/vulnerable-AD/master/vulnad.ps1"));
+          Invoke-VulnAD -UsersLimit 100 -DomainName "traininglab.local"
+

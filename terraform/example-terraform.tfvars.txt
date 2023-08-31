@@ -1,0 +1,5 @@
+# change variables and rename this file in terraform.tfvars
+tokenid = "<proxmox_api_id>"
+tokenkey = "<proxmox_api_token>"
+pve_node_ip = "<proxmox_node_ip>"
+pve_node = "<proxmox_node_name>"

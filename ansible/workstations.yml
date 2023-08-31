@@ -1,0 +1,20 @@
+- name: Join Workstations to the Domain
+  hosts: workstations
+  gather_facts: yes
+  tasks:
+    - name: Set DNS to Domain Controller
+      ansible.windows.win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+        - <domain_controller>
+      
+    - name: Join to Domain
+      ansible.windows.win_domain_membership:
+        dns_domain_name: traininglab.local
+        domain_admin_user: Administrator@traininglab.local
+        domain_admin_password: "{{ da_password }}"
+        state: domain
+      register: wsjoined
+
+    - ansible.windows.win_reboot:
+      when: wsjoined.reboot_required

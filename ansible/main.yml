@@ -1,0 +1,9 @@
+---
+- import_playbook: win-basic.yml
+- import_playbook: monitoring.yml
+- import_playbook: domain_controller.yml
+- import_playbook: fileserver.yml
+- import_playbook: workstations.yml
+- import_playbook: wazuh_agent.yml
+- import_playbook: sysmon.yml
+- import_playbook: vulnerable-ad.yml

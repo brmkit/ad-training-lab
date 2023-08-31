@@ -1,0 +1,41 @@
+---
+- name: Configure Windows 2019 Server as File Server
+  hosts: fileserver
+  gather_facts: yes
+  tasks:
+    - name: Set DNS to Domain Controller
+      ansible.windows.win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+        - <domain_controller>
+
+    - name: Join to Domain
+      ansible.windows.win_domain_membership:
+        dns_domain_name: traininglab.local
+        domain_admin_user: Administrator@traininglab.local
+        domain_admin_password: "{{ da_password }}"
+        state: domain
+      register: joined
+
+    - ansible.windows.win_reboot:
+      when: joined.reboot_required
+
+    - name: Install FS-FileServer feature
+      win_feature:
+        name:
+          - FS-FileServer
+        include_sub_features: yes
+        state: present
+
+    - name: Create SharedFolder directory
+      ansible.windows.win_file:
+        path: C:\SharedFolder
+        state: directory
+
+    - name: Create FileServer shared folder
+      ansible.windows.win_share:
+        name: SharedFolder
+        description: All-in shared folder
+        path: C:\SharedFolder
+        list: yes
+        full: Administrators,Everyone

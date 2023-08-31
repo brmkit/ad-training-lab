@@ -1,0 +1,96 @@
+---
+- name: Prepare monitoring server
+  hosts: monitoring
+  gather_facts: yes
+  become: true
+  tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: monitoring
+
+    - name: Install dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+        state: latest
+        update_cache: yes
+
+    - name: Add GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add docker repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+
+    - name: Install docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: latest
+        update_cache: yes
+
+    - name: Add user into docker
+      user:
+        name: 'ubuntu'
+        groups: docker
+        append: yes
+
+    - name: Fetch latest docker-compose release info
+      uri:
+        url: https://api.github.com/repos/docker/compose/releases/latest
+        return_content: yes
+      register: latest_release
+
+    - name: Extract docker-compose version
+      set_fact:
+        docker_compose_version: "{{ latest_release.content | from_json | json_query('tag_name') | regex_replace('v', '') }}"
+
+    - name: Download latest docker-compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-Linux-x86_64"
+        dest: /usr/local/bin/docker-compose
+        mode: '755'
+
+    - name: Clone wazuh-docker repository
+      git:
+        repo: 'https://github.com/wazuh/wazuh-docker.git'
+        dest: "/home/{{ ansible_user }}/wazuh-docker"
+        version: stable
+
+    - name: Create agent.conf file
+      copy:
+        content: |
+          <agent_config os="Windows">
+              <localfile>
+                  <location>Microsoft-Windows-Sysmon/Operational</location>
+                  <log_format>eventchannel</log_format>
+              </localfile>
+
+              <localfile>
+                  <location>Microsoft-Windows-Windows Defender/Operational</location>
+                  <log_format>eventchannel</log_format>
+              </localfile>
+          </agent_config>
+        dest: "/home/{{ ansible_user }}/agent.conf" 
+
+    - name: Execute command to generate wazuh certificates
+      ansible.builtin.command: docker-compose -f generate-indexer-certs.yml run --rm generator
+      args:
+        chdir: /home/{{ ansible_user }}/wazuh-docker/single-node
+    
+    - name: Run wazuh-docker compose file
+      ansible.builtin.command: docker-compose up -d
+      args:
+        chdir: /home/{{ ansible_user }}/wazuh-docker/single-node
+    
+    - name: Move agent.conf into wazuh-docker container
+      ansible.builtin.command: docker cp /home/{{ ansible_user  }}/agent.conf single-node-wazuh.manager-1:/var/ossec/etc/shared/default/agent.conf

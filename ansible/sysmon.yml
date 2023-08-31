@@ -1,0 +1,33 @@
+---
+- name: Install Sysmon
+  hosts: domain_controller, workstations, fileserver
+  tasks:
+    - name: Download Sysmon
+      ansible.windows.win_get_url:
+        url: https://live.sysinternals.com/Sysmon64.exe
+        dest: C:\Users\{{ ansible_user }}\Downloads\Sysmon64.exe
+
+    - name: Download Sysmon Config
+      ansible.windows.win_get_url:
+        url: https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml
+        dest: C:\Users\{{ ansible_user }}\Downloads\sysmonconfig-export.xml
+
+    - name: Get Sysmon service
+      win_service:
+        name: "Sysmon64"
+      register: sysmonisthere
+
+    - name: Install Sysmon as as Service
+      ansible.windows.win_shell: .\Sysmon64.exe -accepteula -i .\sysmonconfig-export.xml
+      when: not sysmonisthere.exists
+      args:
+        chdir: C:\Users\{{ ansible_user }}\Downloads
+
+    - name: Remove Sysmon Install Files
+      ansible.windows.win_file:
+        path: "C:\\Users\\{{ ansible_user }}\\Downloads\\{{ item }}"
+        state: absent
+      loop: "{{ sysmon_files }}"
+      vars:
+        sysmon_files: ["Sysmon64.exe", "sysmonconfig-export.xml"]
+

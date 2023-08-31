@@ -1,0 +1,81 @@
+#cloud-config
+autoinstall:
+  # version is an Autoinstall required field.
+  version: 1
+
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    primary:
+    - arches: [amd64, i386]
+      uri: http://us.archive.ubuntu.com/ubuntu
+    - arches: [default]
+      uri: http://ports.ubuntu.com/ubuntu-ports
+
+  # This adds the default ubuntu-desktop packages to the system.
+  # Any desired additional packages may also be listed here.
+  packages:
+    - qemu-guest-agent
+
+  # User creation can occur in one of 3 ways:
+  # 1. Create a user using this `identity` section.
+  # 2. Create users as documented in cloud-init inside the user-data section,
+  #    which means this single-user identity section may be removed.
+  # 3. Prompt for user configuration on first boot.  Remove this identity
+  #    section and see the "Installation without a default user" section.
+  identity:
+    realname: ''
+    username: ubuntu
+    # A password hash is needed. `mkpasswd --method=SHA-512` can help.
+    # mkpasswd can be found in the package 'whois'
+    # password -> ubuntu
+    password: '$6$BY7tlmmh0KhsyCdF$mqL6Ud5FS645ylyOUT.qoim/ZcHrfLdE6vgDqAabDGyoj7LCV4Kpskj8POMmf7MmIcpVho0xc12rdstjjjW100'
+    hostname: ubuntu-server
+
+  ssh:
+    allow-pw: true
+    install-server: true
+  locale: en_US
+  keyboard: 
+    layout: it 
+
+  # Subiquity will, by default, configure a partition layout using LVM.
+  # The 'direct' layout method shown here will produce a non-LVM result.
+  storage:
+    layout:
+      name: direct
+    config:
+      - type: disk
+        id: disk0
+        match:
+          size: largest
+      - type: partition
+        id: boot-partition
+        device: disk0
+        size: 500M
+      - type: partition
+        id: root-partition
+        device: disk0
+        size: -1
+
+  # The live-server ISO does not contain some of the required packages,
+  # such as ubuntu-desktop or the hwe kernel (or most of their depdendencies).
+  # The system being installed will need some sort of apt access.
+  # proxy: http://192.168.0.1:3142
+
+  late-commands:
+    - "echo 'Defaults:ubuntu !requiretty' > /target/etc/sudoers.d/ubuntu"
+    - "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /target/etc/sudoers.d/ubuntu"
+    - "chmod 440 /target/etc/sudoers.d/ubuntu"
+
+    # A postinstall script may optionally be used for further install
+    # customization. Deploy this postinstall.sh script on the webserver.
+    # - wget -O /target/postinstall.sh http://192.168.0.2/postinstall.sh
+    # - curtin in-target -- bash /postinstall.sh
+    # - rm /target/postinstall.sh
+
+  # Additional cloud-init configuration affecting the target
+  # system can be supplied underneath a user-data section inside of
+  # autoinstall.
+  # user-data:
+  #   …
