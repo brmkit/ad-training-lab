@@ -37,7 +37,7 @@ resource "proxmox_vm_qemu" "monitoring" {
   sockets    = 1
   
   disk {
-    type         = "virtio"
+    type         = "scsi"
     size         = "60G"
     storage      = var.storage_name
   } 
@@ -226,7 +226,6 @@ resource "proxmox_vm_qemu" "ws2" {
     ]
   }
 }
-
 
 ##################### OUTPUT BLOCK #####################
 
