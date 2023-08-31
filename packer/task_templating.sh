@@ -19,6 +19,7 @@ create_templates(){
 
     for directory in $(ls -d */); do
         cd $directory
+        packer init .
         echo "[+] building template in: $(pwd)"
         packer build .
         cd ..
