@@ -18,6 +18,7 @@ source "proxmox-iso" "traininglab-win2019" {
   token        = "${var.proxmox_api_token}"
   iso_file                 = "local:iso/win2019_EVAL_x64FRE_en-us.iso"
   insecure_skip_tls_verify = true
+  unmount_iso = true
   communicator             = "ssh"
   ssh_username             = "${var.lab_username}"
   ssh_password             = "${var.lab_password}"

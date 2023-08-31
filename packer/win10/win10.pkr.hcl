@@ -28,6 +28,8 @@ source "proxmox-iso" "traininglab-ws" {
   vm_name                  = "traininglab-ws"
   template_description     = "TrainingLab Workstation Template"
   insecure_skip_tls_verify = true
+  unmount_iso = true
+
 
   additional_iso_files {
     device       = "ide3"

@@ -24,6 +24,7 @@ source "proxmox-iso" "traininglab-server" {
   vm_name                  = "traininglab-server"
   template_description     = "TrainingLab Ubuntu Server Template"
   insecure_skip_tls_verify = true
+  unmount_iso = true
   http_directory           = "server"   # or server files inside the http folder on a container inside proxmox host
 
   network_adapters {
