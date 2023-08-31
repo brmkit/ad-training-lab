@@ -1,4 +1,5 @@
 #!/bin/bash
+
 replace() {
         
     read -p "Proxmox API ID: " proxmox_api_id
@@ -48,5 +49,7 @@ requirements(){
 
 replace
 requirements
+chmod +x packer/task_templating.sh
+chmod +x terraform/task_terraforming.sh
 
 echo "[+] run the task_templating.sh in packer/"
