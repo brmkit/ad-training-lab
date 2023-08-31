@@ -168,40 +168,33 @@
                 <Enabled>true</Enabled>
             </AutoLogon>
             <FirstLogonCommands>
-                <!-- Disable network popover -->
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c reg add "HKLM\System\CurrentControlSet\Control\Network\NewNetworkWindowOff"</CommandLine>
-                    <Description>Network prompt</Description>
                     <Order>1</Order>
-                    <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
-                    <Order>2</Order>
                     <!-- Enable SSH service -->
                     <CommandLine>powershell.exe -c Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0</CommandLine>
                     <RequiresUserInput>false</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>3</Order>
+                    <Order>2</Order>
                     <!-- Enable SSH service -->
                     <CommandLine>powershell.exe -c Start-Service sshd</CommandLine>
                     <RequiresUserInput>false</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>4</Order>
+                    <Order>3</Order>
                     <!-- Enable SSH service -->
                     <CommandLine>powershell.exe -c Set-Service -Name sshd -StartupType 'Automatic'</CommandLine>
                     <RequiresUserInput>false</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c wmic useraccount where "name='Administrator'" set PasswordExpires=FALSE</CommandLine>
-                    <Order>5</Order>
+                    <Order>4</Order>
                     <Description>Disable password expiration for TrainingLab user</Description>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <!-- Install QEMU Agent -->
                     <CommandLine>msiexec /q /i F:\guest-agent\qemu-ga-x86_64.msi</CommandLine>
-                    <Order>6</Order>
+                    <Order>5</Order>
                     <Description>Install QEMU Agent</Description>
                 </SynchronousCommand>
                 <!-- END WITHOUT WINDOWS UPDATES -->

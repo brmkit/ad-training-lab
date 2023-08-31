@@ -16,7 +16,7 @@
     - name: Change Administrator password
       ansible.windows.win_user:
         name: Administrator
-        password: {{ da_password }}
+        password: "{{ da_password }}"
 
     - name: Create traininglab.local domain
       win_domain:
