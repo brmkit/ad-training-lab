@@ -36,9 +36,9 @@
                         <Description>ansible-user</Description>
                         <DisplayName></DisplayName>
                         <Group>Administrators</Group>
-                        <Name>ansible</Name>
+                        <Name>provision</Name>
                         <Password>
-                            <Value>AnsiblePassword.</Value>
+                            <Value>ProvisionPassword.</Value>
                             <PlainText>true</PlainText>
                         </Password>
                     </LocalAccount>

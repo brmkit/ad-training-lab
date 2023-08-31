@@ -11,12 +11,12 @@ variable "pve_node_ip" {
 
 variable "win_password" {
     description = "windows password defined in packer template"
-    default = "Deploy123."
+    default = "ProvisionPassword."
 }
 
 variable "win_user" {
     description = "deafult windows localadmin"
-    default = "Administrator"
+    default = "provision"
 }
 
 variable "tokenid" {
