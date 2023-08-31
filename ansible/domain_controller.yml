@@ -24,7 +24,11 @@
         domain_netbios_name: TRAINING
         safe_mode_password: "{{ safe_mode_pass }}"
       register: ad
-    
+
+    - name: Reboot Domain Controller to apply changes
+      ansible.windows.win_reboot:
+      when: ad.reboot_required
+
     - name: Set internal DNS server 
       win_dns_client:
         adapter_names: '*'
@@ -35,7 +39,3 @@
       ansible.windows.win_powershell:
         script: |
           Set-DNSServerForwarder -IPAddress 1.1.1.1
-
-    - name: Reboot after domain creation
-      ansible.windows.win_reboot:
-      when: ad.reboot_required
