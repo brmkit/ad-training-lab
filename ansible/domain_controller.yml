@@ -35,3 +35,7 @@
       ansible.windows.win_powershell:
         script: |
           Set-DNSServerForwarder -IPAddress 1.1.1.1
+
+    - name: Reboot after domain creation
+      ansible.windows.win_reboot:
+      when: ad.reboot_required
