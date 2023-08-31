@@ -1,9 +1,9 @@
 [all:vars]
-ansible_user = Administrator
-ansible_password = AnsiblePassword.
+ansible_user = provision
+ansible_password = ProvisionPassword.
 ansible_connection = ssh
 ansible_shell_type = cmd
-da_password = DomainDeploy123.
+da_password = DomainAdminPassword.
 safe_mode_pass = SafeModePassword.
 
 [monitoring:vars]

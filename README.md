@@ -69,7 +69,7 @@ Below are the default credentials used in the environment:
 | Monitoring Server    | ubuntu        | ubuntu                |
 | Wazuh                | admin         | SecretPassword        |
 | Domain Administrator | Administrator | DomainAdminPassword.  |
-| Ansible User         | ansible       | AnsiblePassword.      |
+| Provision User       | provision     | ProvisionPassword.    |
 
 
 ***Obviously it's not intended to be a SAFE environment.***
