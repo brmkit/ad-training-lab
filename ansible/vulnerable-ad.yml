@@ -1,5 +1,5 @@
 ---
-- name: Doing bad stuff...
+- name: Adding misconfiguration
   hosts: domain_controller
   tasks:
     - name: Running Vulnerable-AD script 

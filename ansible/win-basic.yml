@@ -1,6 +1,6 @@
 # just a workaround :)
 ---
-- name: Requirements
+- name: Doing some magic to prepare windows hosts
   hosts: domain_controller, workstations, fileserver
   gather_facts: yes
   tasks:
@@ -21,6 +21,6 @@
       datatype: dword
       state: present
 
-  - name: Reboot before create domain
+  - name: Reboot before domain creation
     ansible.windows.win_reboot:
     when: deactive.changed

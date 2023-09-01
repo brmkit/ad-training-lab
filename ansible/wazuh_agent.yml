@@ -1,8 +1,8 @@
 ---
-- name: Install Wazuh everywhere
+- name: Deploy Wazuh agent everywhere
   hosts: domain_controller, workstations, fileserver
   tasks:
-    - name: Install 
+    - name: Installing Wazuh Agent
       args:
         chdir: C:\Users\{{ ansible_user }}\Downloads
       ansible.windows.win_powershell: 
