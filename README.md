@@ -58,7 +58,7 @@ Download directly into *proxmox web ui -> local storage -> ISO templates -> down
 - win2019 -> https://go.microsoft.com/fwlink/p/?LinkID=2195167&clcid=0x409&culture=en-us&country=US
 - virtio driver -> https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
 
-You must create the autounattend-winXXX.iso files to deploy windows correctly, i think there's no other solution to use autounattend.xml files (with proxmox). Follow the scripts instructions.
+You must create the autounattend-winXXX.iso files to deploy windows correctly, ~~i think there's no other solution to use autounattend.xml files (with proxmox)~~ (RTFM!). Follow the scripts instructions.
 
 ### Credentials
 Below are the default credentials used in the environment:
@@ -75,6 +75,7 @@ Below are the default credentials used in the environment:
 ***Obviously it's not intended to be a SAFE environment.***
 
 ### TODO
+- [ ] remove the manually-iso-uploads part, i found the way.
 - [ ] i know, the ansible part needs some improvement, i'm working on it.
 - [ ] add a windows 2022 server and windows 11 templates.
 
