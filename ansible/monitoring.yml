@@ -1,14 +1,14 @@
 ---
-- name: Prepare monitoring server
+- name: Configuring monitoring server
   hosts: monitoring
   gather_facts: yes
   become: true
   tasks:
-    - name: Set hostname
+    - name: Setting hostname
       ansible.builtin.hostname:
         name: monitoring
 
-    - name: Install dependencies
+    - name: Installing dependencies
       apt:
         name:
           - apt-transport-https
@@ -19,17 +19,17 @@
         state: latest
         update_cache: yes
 
-    - name: Add GPG key
+    - name: Adding GPG key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
 
-    - name: Add docker repository
+    - name: Adding docker repository
       apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
         state: present
 
-    - name: Install docker
+    - name: Installing docker
       apt:
         name:
           - docker-ce
@@ -38,23 +38,23 @@
         state: latest
         update_cache: yes
 
-    - name: Add user into docker
+    - name: Adding user into docker
       user:
         name: 'ubuntu'
         groups: docker
         append: yes
 
-    - name: Fetch latest docker-compose release info
+    - name: Checking latest docker-compose release
       uri:
         url: https://api.github.com/repos/docker/compose/releases/latest
         return_content: yes
       register: latest_release
 
-    - name: Extract docker-compose version
+    - name: Extracting docker-compose version
       set_fact:
         docker_compose_version: "{{ latest_release.content | from_json | json_query('tag_name') | regex_replace('v', '') }}"
 
-    - name: Download latest docker-compose
+    - name: Downloading latest docker-compose
       get_url:
         url: "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-Linux-x86_64"
         dest: /usr/local/bin/docker-compose
@@ -66,7 +66,7 @@
         dest: "/home/{{ ansible_user }}/wazuh-docker"
         version: stable
 
-    - name: Create agent.conf file
+    - name: Creating agent.conf file
       copy:
         content: |
           <agent_config os="Windows">
@@ -82,12 +82,12 @@
           </agent_config>
         dest: "/home/{{ ansible_user }}/agent.conf" 
 
-    - name: Execute command to generate wazuh certificates
+    - name: Generate wazuh certificates
       ansible.builtin.command: docker-compose -f generate-indexer-certs.yml run --rm generator
       args:
         chdir: /home/{{ ansible_user }}/wazuh-docker/single-node
     
-    - name: Run wazuh-docker compose file
+    - name: Sping up wazuh-docker
       ansible.builtin.command: docker-compose up -d
       args:
         chdir: /home/{{ ansible_user }}/wazuh-docker/single-node

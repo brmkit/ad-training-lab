@@ -1,9 +1,9 @@
 ---
-- name: Configure Windows 2019 Server as Domain Controller
+- name: Configuring Domain Controller
   hosts: domain_controller
   gather_facts: yes
   tasks:
-    - name: Install Active Directory and DNS Server Role
+    - name: Installing Active Directory and DNS Server Role
       win_feature:
         name:
           - AD-Domain-Services
@@ -25,7 +25,7 @@
         safe_mode_password: "{{ safe_mode_pass }}"
       register: ad
 
-    - name: Reboot Domain Controller to apply changes
+    - name: Reboot DC to apply changes
       ansible.windows.win_reboot:
       when: ad.reboot_required
 
