@@ -26,13 +26,13 @@ source "proxmox-iso" "traininglab-win2019" {
   qemu_agent               = true
   cores                    = 6
   memory                   = 8192
-  cpu_type                 = "host" 
   vm_name                  = "traininglab-win2019"
   template_description     = "TrainingLab WindowsServer Template - Sysprep done"
 
   additional_iso_files {
-    device       = "ide3"
-    iso_file     = "local:iso/Autounattend-win2019.iso"
+    cd_files =["autounattend.xml"]
+    cd_label = "auto-win2019.iso"
+    iso_storage_pool = "local"
     unmount      = true
   }
 

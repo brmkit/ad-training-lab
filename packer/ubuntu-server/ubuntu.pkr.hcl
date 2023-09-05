@@ -20,12 +20,20 @@ source "proxmox-iso" "traininglab-server" {
   qemu_agent               = true
   cores                    = 6
   memory                   = 8192
-  cpu_type                 = "host"
   vm_name                  = "traininglab-server"
   template_description     = "TrainingLab Ubuntu Server Template"
   insecure_skip_tls_verify = true
   unmount_iso = true
   http_directory           = "server"   # or server files inside the http folder on a container inside proxmox host
+
+  additional_iso_files {
+    cd_files = [
+      "./server/meta-data",
+      "./server/user-data"
+      ]
+      cd_label = "autoinstall"
+      iso_storage_pool = "local"
+  }
 
   network_adapters {
     bridge = var.netbridge
@@ -53,7 +61,7 @@ source "proxmox-iso" "traininglab-server" {
       "<del><del><del><del><del><del><del><del>",
       "<del><del><del><del><del><del><del><del>",
       "<del><del><del><del><del><del><del><del><del>",
-      "linux /casper/vmlinuz --- autoinstall ds=\"nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\"<enter><wait>",
+      "linux /casper/vmlinuz --- autoinstall s=/autoinstall/<enter><wait>",
       "initrd /casper/initrd<enter><wait>",
       "boot<enter>",
       "<enter><f10><wait>"

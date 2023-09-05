@@ -24,17 +24,17 @@ source "proxmox-iso" "traininglab-ws" {
   qemu_agent               = true
   cores                    = 6
   memory                   = 8192
-  cpu_type                 = "host"
   vm_name                  = "traininglab-ws"
   template_description     = "TrainingLab Workstation Template"
   insecure_skip_tls_verify = true
   unmount_iso = true
 
-
   additional_iso_files {
-    device       = "ide3"
-    iso_file     = "local:iso/Autounattend-win10.iso"
+    cd_files =["autounattend.xml"]
+    cd_label = "auto-win10.iso"
+    iso_storage_pool = "local"
     unmount      = true
+
   }
 
   additional_iso_files {

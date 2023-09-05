@@ -13,8 +13,10 @@ pveum role add provisioner -privs "Datastore.AllocateSpace Datastore.Audit Pool.
 pveum user add userprovisioner@pve
 pveum aclmod / -user userprovisioner@pve -role provisioner
 pveum user token add userprovisioner@pve provisioner-token --privsep=0
+pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin --token userprovisioner@pve\!provisioner-token  # -> required for iso upload...
 # make sure to save the output
 ```
+
 
 ### Deployment
 1. Create a VM inside your Proxmox hosts and ssh into it
@@ -75,7 +77,7 @@ Below are the default credentials used in the environment:
 ***Obviously it's not intended to be a SAFE environment.***
 
 ### TODO
-- [ ] remove the manually-iso-uploads part, i found the way.
+- [x] remove the manually-iso-uploads part, i found the way.
 - [ ] i know, the ansible part needs some improvement, i'm working on it.
 - [ ] add a windows 2022 server and windows 11 templates.
 
