@@ -77,7 +77,7 @@ Below are the default credentials used in the environment:
 ***Obviously it's not intended to be a SAFE environment.***
 
 ### TODO
-- [x] remove the manually-iso-uploads part, i found the way.
+- [x] remove the manually-iso-uploads part.
 - [ ] i know, the ansible part needs some improvement, i'm working on it.
 - [ ] add a windows 2022 server and windows 11 templates.
 
