@@ -31,7 +31,7 @@ source "proxmox-iso" "traininglab-server" {
       "./server/meta-data",
       "./server/user-data"
       ]
-      cd_label = "autoinstall"
+      cd_label = "cidata"
       iso_storage_pool = "local"
   }
 
@@ -61,7 +61,7 @@ source "proxmox-iso" "traininglab-server" {
       "<del><del><del><del><del><del><del><del>",
       "<del><del><del><del><del><del><del><del>",
       "<del><del><del><del><del><del><del><del><del>",
-      "linux /casper/vmlinuz --- autoinstall s=/autoinstall/<enter><wait>",
+      "linux /casper/vmlinuz --- autoinstall s=/cidata/<enter><wait>",
       "initrd /casper/initrd<enter><wait>",
       "boot<enter>",
       "<enter><f10><wait>"
