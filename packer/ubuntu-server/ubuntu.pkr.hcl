@@ -33,6 +33,7 @@ source "proxmox-iso" "traininglab-server" {
       ]
       cd_label = "cidata"
       iso_storage_pool = "local"
+      unmount = true
   }
 
   network_adapters {
