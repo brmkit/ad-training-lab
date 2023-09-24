@@ -16,7 +16,7 @@ source "proxmox-iso" "traininglab-ws" {
   node         = "${var.proxmox_hostname}"
   username     = "${var.proxmox_api_id}"
   token        = "${var.proxmox_api_token}"
-  iso_file     = "local:iso/win10-enterprise-eval.iso"
+  iso_file     = "local:iso/win10_ltsc.iso"
   communicator             = "ssh"
   ssh_username             = "${var.lab_username}"
   ssh_password             = "${var.lab_password}"

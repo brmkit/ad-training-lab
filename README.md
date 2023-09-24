@@ -55,12 +55,13 @@ The infrastructure is designed to be simple and use few resources in its basic c
 ### Download necessary ISOs
 Download directly into *proxmox web ui -> local storage -> ISO templates -> download from url*
 
-- ubuntu -> https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-live-server-amd64.iso
-- win10 -> https://go.microsoft.com/fwlink/p/?LinkID=2208844&clcid=0x409&culture=en-us&country=US
-- win2019 -> https://go.microsoft.com/fwlink/p/?LinkID=2195167&clcid=0x409&culture=en-us&country=US
-- virtio driver -> https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
+- ubuntu -> https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-live-server-amd64.iso -> rename in *ubuntu_server.iso*
+- win10 -> https://go.microsoft.com/fwlink/p/?LinkID=2208844&clcid=0x409&culture=en-us&country=US -> rename in *win10_ltsc.iso*
+- win2019 -> https://go.microsoft.com/fwlink/p/?LinkID=2195167&clcid=0x409&culture=en-us&country=US -> rename in *win2019_server.iso*
+- virtio driver -> https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -> just download
 
-You must create the autounattend-winXXX.iso files to deploy windows correctly, ~~i think there's no other solution to use autounattend.xml files (with proxmox)~~ (RTFM!). Follow the scripts instructions.
+~~You must create the autounattend-winXXX.iso files to deploy windows correctly, i think there's no other solution to use autounattend.xml files (with proxmox)~~ (RTFM!).
+Follow the instructions.
 
 ### Credentials
 Below are the default credentials used in the environment:
