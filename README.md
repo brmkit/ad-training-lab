@@ -24,7 +24,7 @@ pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin 
 1. Create a VM inside your Proxmox hosts and ssh into it
 2. `git clone <repo>` 
 3. `cd <repo>`
-4. `chmod +x requirements.sh && sudo ./requirements.sh`
+4. `chmod +x requirements.sh packer/task_templating.sh terraform/task_terraforming.sh && sudo ./requirements.sh`
 5. then run the `task_templating.sh` script in `packer/`
 6. and `task_terraforming.sh` script in `terraform/`
 7. finally, inside `ansible/` run `ansible-playbook main.yml`
