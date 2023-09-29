@@ -11,7 +11,9 @@ update_ansible_ips() {
     MONITORING=$(echo "$OUTPUT" | grep "MONITORING =" | cut -d '"' -f 2)
 
     cd ../ansible
-    find . -type f -exec sed -i \
+    cp inventory.bak inventory.ini
+    
+    find . -type f ! -name "inventory.bak" -name "inventory.ini" -exec sed -i \
         -e "s/<domain_controller>/$DC/g" \
         -e "s/<workstation1>/$WS1/g" \
         -e "s/<workstation2>/$WS2/g" \

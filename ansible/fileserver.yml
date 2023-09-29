@@ -7,7 +7,7 @@
       ansible.windows.win_dns_client:
         adapter_names: '*'
         dns_servers:
-        - <domain_controller>
+        - "{{ hostvars[groups['domain_controller'][0]]['ansible_host'] }}"
 
     - name: Join Domain
       ansible.windows.win_domain_membership:
