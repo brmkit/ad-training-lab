@@ -7,7 +7,7 @@
         chdir: C:\Users\{{ ansible_user }}\Downloads
       ansible.windows.win_powershell: 
         script: |
-          Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.5.1-1.msi -OutFile ${env:tmp}\wazuh-agent.msi; msiexec.exe /i ${env:tmp}\wazuh-agent.msi /q WAZUH_MANAGER='{{ hostvars[groups['monitoring'][0]]['ansible_host'] }}' WAZUH_REGISTRATION_SERVER='{{ hostvars[groups['monitoring'][0]]['ansible_host'] }}' WAZUH_AGENT_GROUP='default'
+          Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.5.1-1.msi -OutFile ${env:tmp}\wazuh-agent.msi; msiexec.exe /i ${env:tmp}\wazuh-agent.msi /q WAZUH_MANAGER='{{ monitoring_ip }}' WAZUH_REGISTRATION_SERVER='{{ monitoring_ip }}' WAZUH_AGENT_GROUP='default'
 
     - name: Start Wazuh
       ansible.windows.win_service:
