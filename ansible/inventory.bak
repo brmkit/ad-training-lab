@@ -5,6 +5,8 @@ ansible_connection = ssh
 ansible_shell_type = cmd
 da_password = DomainAdminPassword.
 safe_mode_pass = SafeModePassword.
+monitoring_ip = <monitoring_server>
+dc_ip = <domain_controller>
 
 [monitoring:vars]
 ansible_user = ubuntu
