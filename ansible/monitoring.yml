@@ -87,7 +87,7 @@
       args:
         chdir: /home/{{ ansible_user }}/wazuh-docker/single-node
     
-    - name: Sping up wazuh-docker
+    - name: Spin up wazuh-docker
       ansible.builtin.command: docker-compose up -d
       args:
         chdir: /home/{{ ansible_user }}/wazuh-docker/single-node
