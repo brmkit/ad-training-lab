@@ -1,37 +1,7 @@
 # Automated AD Training Lab
-This is a simple way to deploy a minimal active directory lab environment on Proxmox.
+This is a simple way to deploy a ~~minimal active directory lab~~ vulnerable active directory environment on Proxmox.
 
-*just another automated Active Directory lab and not much more*
-
-### Prerequisite
-1. a Proxmox server
-2. sufficient space on `local-lvm` (~200GB)
-3. an api token to interact with Proxmox:
-4. create a "*training*" pools in Proxmox -> Datacenter -> Permissions -> Pools.
-5. 
-```bash
-# run on proxmox server shell
-pveum role add provisioner -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate SDN.Use Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Console VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt"
-pveum user add userprovisioner@pve
-pveum aclmod / -user userprovisioner@pve -role provisioner
-pveum user token add userprovisioner@pve provisioner-token --privsep=0
-pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin --token userprovisioner@pve\!provisioner-token
-# make sure to save the output
-```
-
-
-### Deployment
-1. Create a VM inside your Proxmox hosts and ssh into it
-2. `git clone <repo>` 
-3. `cd <repo>`
-4. `chmod +x requirements.sh packer/task_templating.sh terraform/task_terraforming.sh && sudo ./requirements.sh`
-5. then run the `task_templating.sh` script in `packer/`
-6. and `task_terraforming.sh` script in `terraform/`
-7. finally, inside `ansible/` run `ansible-playbook main.yml`
-8. Enjoy :crossed_fingers:
-
-*BONUS: check the files and modify network or storage name if needed.
-The lab is currently deployed on storage **local-lvm** and network **vmbr1**.*
+*just another automated Active Directory lab and a little bit more*
 
 ### Why another automated lab?
 
@@ -41,54 +11,103 @@ The lab is currently deployed on storage **local-lvm** and network **vmbr1**.*
 
 *seriously, I just want to learn packer + terraform + ansible stuff*
 
+### A word before you begin
+I've discovered that creating a lab like this is more useful to others than just to myself. This consideration inspired me to spend time defining some basic attack paths to help beginners understand how to use a C2 and their functionalities while playing with some Active Directory stuff... without spending money.
+
+I'm not aiming to emulate the perfection of the Prolabs by Hack The Box, or the new OpenLab RTO from ZeroPointSecurity or all the beatifull scenario out there in this magic world. Instead, this lab is meant to be straightforward and accessible **for newcomers**.
+
+If you want something like this but **way much better**:
+
+- [GOAD](https://github.com/Orange-Cyberdefense/GOAD)
+
+or... use your money :sweat_smile:
+
+- [All the HackTheBox Prolabs!](https://www.hackthebox.com/hacker/pro-labs)
+- [OpenRTO Labs](https://training.zeropointsecurity.co.uk/bundles/open-rto-lab)
+- [SlayerLab](https://slayerlabs.com/)
+- [VulnLab](https://www.vulnlab.com/)
+
+## Getting started
+### Prerequisite
+1. a Proxmox server
+2. sufficient space on `local-lvm` (~200GB)
+3. define privileges and create API token
+```bash
+# run on proxmox server shell
+pveum role add provisioner -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Pool.Audit SDN.Use Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Console VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt"
+pveum user add userprovisioner@pve
+pveum aclmod / -user userprovisioner@pve -role provisioner
+pveum user token add userprovisioner@pve provisioner-token --privsep=0
+pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin --token userprovisioner@pve\!provisioner-token
+```
+**you have to save the output somewhere, it's needed!**
+
+4. download necessary isos
+``` bash
+# run on proxmox server shell
+wget https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-live-server-amd64.iso -O /var/lib/vz/template/iso/ubuntu_server.iso
+wget https://go.microsoft.com/fwlink/p/?LinkID=2208844&clcid=0x409&culture=en-us&country=US -O /var/lib/vz/template/iso/win10_ltsc.iso
+wget https://go.microsoft.com/fwlink/p/?LinkID=2195167&clcid=0x409&culture=en-us&country=US -O /var/lib/vz/template/iso/win2019_server.iso
+wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/vz/template/iso/virtio-win.iso
+```
+
+### Deploy
+1. Create a VM (ubuntu-desktop) inside your Proxmox hosts and ssh into it
+2. `git clone <repo>` 
+3. `cd ad-training-lab`
+4. `cp env.example .env && nano .env` fill with apitoken and proxmox ip!
+5. `chmod +x requirements.sh packer/task_templating.sh terraform/task_terraforming.sh && sudo ./requirements.sh`
+6. then run the `task_templating.sh` script inside `packer/`
+7. and `task_terraforming.sh` script in `terraform/`
+8. finally, inside `ansible/` run `ansible-playbook main.yml`
+9. Enjoy :crossed_fingers:
+
+*BONUS: check the files and modify network or storage name if needed.
+The lab is currently deployed on storage **local-lvm** and network bridge **vmbr1**.*
+
+## Lab Overview
+
 ### Infrastructure
-The infrastructure is designed to be simple and use few resources in its basic configuration, you can add as many VMs per "type" as you like, or increase the complexity of the environment by duplicating VMs and trusting the two DCs. 
+The infrastructure is designed to be simple and use few resources, you can add as many VMs per "type" as you like, or increase the complexity of the environment by duplicating VMs and trusting DCs (?).
 
-![image](traininglab-schema.png)
-
-- **Monitoring Server:** Ubuntu-based server with docker, docker-compose and wazuh-docker deployed.
+- **Monitoring Server:** Ubuntu-based server with docker, docker-compose and **wazuh-docker** deployed.
 
 - **DC**: Windows Server 2019 with AD roles installed.
 
 - **FS:** Windows Server 2019 server with FS-FileServer role installed.
 
+- **WEB:** Windows Server 2019 server with IIS Installed
+
 - **WS1 & WS2:** Windows 10 Enterprise LTSC workstations.
-
-### Download necessary ISOs
-Download directly into *proxmox web ui -> local storage -> ISO templates -> download from url*
-
-- ubuntu -> https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-live-server-amd64.iso -> rename in *ubuntu_server.iso*
-- win10 -> https://go.microsoft.com/fwlink/p/?LinkID=2208844&clcid=0x409&culture=en-us&country=US -> rename in *win10_ltsc.iso*
-- win2019 -> https://go.microsoft.com/fwlink/p/?LinkID=2195167&clcid=0x409&culture=en-us&country=US -> rename in *win2019_server.iso*
-- virtio driver -> https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -> just download
-
-~~You must create the autounattend-winXXX.iso files to deploy windows correctly, i think there's no other solution to use autounattend.xml files (with proxmox)~~ (RTFM!).
-Follow the instructions.
-
-### Credentials
-Below are the default credentials used in the environment:
-
-| Resources            | Username      | Password              |
-|----------------------|---------------|-----------------------|
-| Windows hosts        | Administrator | Deploy123.          |
-| Monitoring Server    | ubuntu        | ubuntu                |
-| Wazuh                | admin         | SecretPassword        |
-| Domain Administrator | Administrator | DomainAdminPassword.  |
-| Provision User       | provision     | ProvisionPassword.    |
-
 
 ***Obviously it's not intended to be a SAFE environment.***
 
-### TODO
-- [x] remove the manually-iso-uploads part.
-- [ ] i know, the ansible part needs some improvement, i'm working on it.
-- [ ] add a windows 2022 server and windows 11 templates.
+### Credentials
+Below are the credentials used in the environment:
 
-### Acknowledgments
+| Resources            | Username      | Password              | Note                  |
+|----------------------|---------------|-----------------------|-----------------------|
+| Monitoring Server    | ubuntu        | ubuntu                |                       |
+| Wazuh Web Interface  | admin         | SecretPassword        |                       |
+| Domain Administrator | Administrator | DomainAdminPassword.  |                       |
+| Provision User       | provision     | ProvisionPassword.    |                       |
+
+**You can start your journey logging in with: RED\jacktest -> Password1!**
+
+*you can also change domain_name variable in ansible/inventory/group_vars/all.yml*
+
+## TODO
+- [x] remove the manually-iso-uploads part.
+- [x] i know, the ansible part needs some improvement, i'm working on it.
+- [ ] let packer do the iso downloading with the iso_url option
+- [ ] convert ansible tasks using *microsoft.ad* ansible collection
+- [ ] move monitoring on elk + elastic_agent (?)
+- [ ] add user simulation ([GHOSTS](https://github.com/cmu-sei/GHOSTS) or similar).
+
+## Acknowledgments
 - [Packer Plugin for Windows Update](https://github.com/rgl/packer-plugin-windows-update): An indispensable plugin for managing the operating system update before creating the template.
 - [SecLab by mttaggart](https://github.com/mttaggart/seclab): An impressive repository and a person absolutely worth following. It inspired me to create something of my own.
 - [packer-windows by StefanScherer](https://github.com/StefanScherer/packer-windows): packer + windows = StefanScherer repo.
-- [vulnerable-AD by WazeHell](https://github.com/WazeHell/vulnerable-AD): This script outlines vulnerabilities and misconfigurations in an Active Directory environment, making it perfect for the intended purpose.
-
+- [vulnerable-AD by WazeHell](https://github.com/WazeHell/vulnerable-AD): This script defines vulnerabilities and misconfigurations in an Active Directory environment, just perfect.
 
 Thank you to the creators and contributors of these projects for their invaluable resources and inspiration.

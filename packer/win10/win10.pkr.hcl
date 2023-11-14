@@ -5,7 +5,7 @@ packer {
       source  = "github.com/hashicorp/proxmox"
     }
     windows-update = {
-      version = "0.14.3"
+      version = ">=0.14.3"
       source = "github.com/rgl/windows-update"
     }
   }
@@ -13,18 +13,19 @@ packer {
 
 source "proxmox-iso" "traininglab-ws" {
   proxmox_url  = "https://${var.proxmox_node}:8006/api2/json"
-  node         = "${var.proxmox_hostname}"
-  username     = "${var.proxmox_api_id}"
-  token        = "${var.proxmox_api_token}"
+  node         = var.proxmox_hostname
+  username     = var.proxmox_api_id
+  token        = var.proxmox_api_token
   iso_file     = "local:iso/win10_ltsc.iso"
   communicator             = "ssh"
-  ssh_username             = "${var.lab_username}"
-  ssh_password             = "${var.lab_password}"
+  ssh_username             = var.lab_username
+  ssh_password             = var.lab_password
   ssh_timeout              = "30m"
   qemu_agent               = true
   cores                    = 6
   memory                   = 8192
   vm_name                  = "traininglab-ws"
+  tags                     = "traininglab-ws"
   template_description     = "TrainingLab Workstation Template"
   insecure_skip_tls_verify = true
   unmount_iso = true

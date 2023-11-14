@@ -1,12 +1,18 @@
 ---
-- name: Configuring monitoring server
+- name: CONFIGURING MONITORING SERVER
   hosts: monitoring
   gather_facts: yes
   become: true
   tasks:
+    - name: Generate machine-id
+      command: systemd-machine-id-setup
+    
+    - name: Reboot required
+      reboot:
+    
     - name: Setting hostname
-      ansible.builtin.hostname:
-        name: monitoring
+      hostname:
+        name: "{{ inventory_hostname }}"
 
     - name: Installing dependencies
       apt:
@@ -65,6 +71,7 @@
         repo: 'https://github.com/wazuh/wazuh-docker.git'
         dest: "/home/{{ ansible_user }}/wazuh-docker"
         version: stable
+        force: true
 
     - name: Creating agent.conf file
       copy:
@@ -74,7 +81,22 @@
                   <location>Microsoft-Windows-Sysmon/Operational</location>
                   <log_format>eventchannel</log_format>
               </localfile>
-
+              <localfile>
+                  <location>Microsoft-Windows-TerminalServices-RemoteConnectionManager</location>
+                  <log_format>eventchannel</log_format>
+              </localfile>
+              <localfile>
+                  <location>Microsoft-Windows-PowerShell/Operational</location>
+                  <log_format>eventchannel</log_format>
+              </localfile>
+              <localfile>
+                  <location>Security</location>
+                  <log_format>eventchannel</log_format>
+              </localfile>
+              <localfile>
+                  <location>System</location>
+                  <log_format>eventchannel</log_format>
+              </localfile>    
               <localfile>
                   <location>Microsoft-Windows-Windows Defender/Operational</location>
                   <log_format>eventchannel</log_format>
@@ -83,14 +105,14 @@
         dest: "/home/{{ ansible_user }}/agent.conf" 
 
     - name: Generate wazuh certificates
-      ansible.builtin.command: docker-compose -f generate-indexer-certs.yml run --rm generator
+      command: docker-compose -f generate-indexer-certs.yml run --rm generator
       args:
         chdir: /home/{{ ansible_user }}/wazuh-docker/single-node
     
     - name: Spin up wazuh-docker
-      ansible.builtin.command: docker-compose up -d
+      command: docker-compose up -d
       args:
         chdir: /home/{{ ansible_user }}/wazuh-docker/single-node
-    
+  
     - name: Move agent.conf into wazuh-docker container
-      ansible.builtin.command: docker cp /home/{{ ansible_user  }}/agent.conf single-node-wazuh.manager-1:/var/ossec/etc/shared/default/agent.conf
+      command: docker cp /home/{{ ansible_user  }}/agent.conf single-node-wazuh.manager-1:/var/ossec/etc/shared/default/agent.conf

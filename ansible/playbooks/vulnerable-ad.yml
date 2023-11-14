@@ -1,0 +1,37 @@
+---
+- name: MISCONFIGURING AD
+  hosts: DC
+  gather_facts: no
+  tasks:
+    - name: Running Vulnerable-AD script 
+      ansible.windows.win_powershell: 
+        script: |
+          IEX((new-object net.webclient).downloadstring("https://raw.githubusercontent.com/wazehell/vulnerable-AD/master/vulnad.ps1"));
+          Invoke-VulnAD -UsersLimit 100 -DomainName {{ domain_name }}
+
+    - name: Add some objects and vulns
+      win_shell: |
+        Import-Module ActiveDirectory
+        New-ADObject -Name 'SharedFolder' -Type 'volume' -OtherAttributes @{'uNCName'='\\fs.{{ domain_name }}\SharedFolder'}
+        Get-ADComputer -Identity "web" | Set-ADAccountControl -TrustedForDelegation $true
+
+
+### is that useful?
+#    - name: Misconfiguration - BONUS TRACK
+#      community.windows.win_scheduled_task:
+#        name: ShareViewer
+#        description: check if anyone did a magic trick
+#        actions:
+#          - path: cmd.exe
+#            arguments: /c explorer.exe \\fs.{{ domain_name }}\SharedFolder
+#        triggers:
+#        - type: daily
+#          repetition:
+#            interval: PT1H
+#            duration: P1D
+#          start_boundary: '2023-10-09T09:00:00'
+#        username: '{{ domain_admin_login }}'
+#        password: '{{ domain_admin_password }}'
+#        compatibility: 4
+#        state: present
+#        enabled: yes

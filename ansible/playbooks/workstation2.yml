@@ -1,0 +1,74 @@
+- name: CONFIGURING WORKSTATION 2
+  hosts: WS2
+  gather_facts: no
+  tasks:
+    - name: Rename server
+      win_hostname:
+        name: "{{ inventory_hostname }}"
+      register: rename
+      
+    - name: Reboot after rename
+      win_reboot:
+      when: rename.reboot_required
+      
+    - name: Set DNS to Domain Controller
+      win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+        - "{{ hostvars['DC']['ansible_host'] }}"
+      
+    - name: Join Domain
+      win_domain_membership:
+        dns_domain_name: "{{ domain_name }}"
+        domain_admin_user: Administrator@{{ domain_name }}
+        domain_admin_password: "{{ domain_admin_password }}"
+        state: domain
+      register: wsjoined
+      
+    - name: Reboot after join
+      win_reboot:
+      when: wsjoined.reboot_required
+
+    - name: Allow RDP to specific users
+      ansible.windows.win_user_right:
+        name: SeRemoteInteractiveLogonRight
+        users:
+        - Administrators
+        - Remote Desktop Users
+
+    - name: Map shared folder
+      community.windows.win_mapped_drive:
+        letter: 'Z'
+        path: \\fs.{{ domain_name }}\SharedFolder
+        state: present
+
+    - name: Misconfiguration - Create directory structure prerequisite
+      win_file:
+        path: C:\Users\{{ first_user }}.{{ domain_short }}\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine
+        state: directory
+
+    - name: Misconfiguration - Just a command to create user's folders structure
+      local_action:
+        module: shell
+        args:
+          cmd: DISPLAY=:0 nohup gnome-terminal -- sshpass -p {{ first_user_password }} ssh {{ first_user_ssh}}@{{ hostvars['WS2']['ansible_host'] }} "whoami" </dev/null >/dev/null 2>&1 &
+          executable: /bin/bash
+      vars:
+        ansible_shell_type: sh
+
+# sometimes gets weird
+    - name: Misconfiguration - Generate a special Console History file
+      ansible.windows.win_template:
+        src: files/console_history.txt.j2
+        dest: C:\Users\{{ first_user }}.{{ domain_short }}\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+
+    - name: Misconfiguration - Add user to rdp group
+      win_group_membership:
+        name: Remote Desktop Users
+        members:
+          - '{{ first_user_login }}'
+        state: present
+    
+    - name: Misconfiguration - Enable firewall WMI rules 
+      win_shell: netsh advfirewall firewall set rule group="windows management instrumentation (wmi)" new enable=yes
+

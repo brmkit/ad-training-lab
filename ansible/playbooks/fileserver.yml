@@ -1,0 +1,75 @@
+---
+- name: CONFIGURING FILESERVER
+  hosts: FS
+  gather_facts: no
+  tasks:
+    - name: Rename server
+      win_hostname:
+        name: "{{ inventory_hostname }}"
+      register: rename
+      
+    - name: Reboot after rename
+      win_reboot:
+      when: rename.reboot_required
+      
+    - name: Set DNS to Domain Controller
+      win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+        - "{{ hostvars['DC']['ansible_host'] }}"
+
+    - name: Join Domain
+      win_domain_membership:
+        dns_domain_name: "{{ domain_name }}"
+        domain_admin_user: Administrator@{{ domain_name }}
+        domain_admin_password: "{{ domain_admin_password }}"
+        state: domain
+      register: joined
+
+    - name: Reboot after join
+      win_reboot:
+      when: joined.reboot_required
+
+    - name: Allow RDP to specific users
+      ansible.windows.win_user_right:
+        name: SeRemoteInteractiveLogonRight
+        users:
+        - Administrators
+
+    - name: Installing FS-FileServer feature
+      win_feature:
+        name:
+          - FS-FileServer
+        include_sub_features: yes
+        state: present
+
+    - name: Creating SharedFolder directory
+      win_file:
+        path: C:\SharedFolder
+        state: directory
+
+    - name: Creating FileServer shared folder
+      win_share:
+        name: SharedFolder
+        description: All-in shared folder
+        path: C:\SharedFolder
+        list: yes
+        full: '{{ domain_short }}\Domain Admins'
+        change: '{{ domain_short }}\Domain Users'
+        read: Everyone
+    
+    - name: Misconfiguration - Add fs server admin to localadmin group
+      win_group_membership:
+        name: Administrators
+        members:
+          - '{{ server_admin_login }}'
+        state: present
+
+    - name: Misconfiguration - Add a Domain Admin process
+      local_action:
+        module: shell
+        args:
+          cmd: DISPLAY=:0 nohup gnome-terminal -- sshpass -p {{ domain_admin_password }} ssh {{ domain_admin_ssh }}@{{ hostvars['FS']['ansible_host'] }} </dev/null >/dev/null 2>&1 &
+          executable: /bin/bash
+      vars:
+        ansible_shell_type: sh

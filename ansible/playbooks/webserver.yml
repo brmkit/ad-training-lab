@@ -1,0 +1,73 @@
+---
+- name: CONFIGURING WEBSERVER
+  hosts: WEB
+  gather_facts: no
+  tasks:
+    - name: Rename server
+      win_hostname:
+        name: "{{ inventory_hostname }}"
+      register: rename
+      
+    - name: Reboot after rename
+      win_reboot:
+      when: rename.reboot_required
+
+    - name: Set DNS to Domain Controller
+      win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+        - "{{ hostvars['DC']['ansible_host'] }}"
+
+    - name: Join Domain
+      win_domain_membership:
+        dns_domain_name: "{{ domain_name }}"
+        domain_admin_user: Administrator@{{ domain_name }}
+        domain_admin_password: "{{ domain_admin_password }}"
+        state: domain
+      register: joined
+
+    - name: Reboot if joined
+      win_reboot:
+      when: joined.reboot_required
+
+    - name: Allow RDP to specific users
+      ansible.windows.win_user_right:
+        name: SeRemoteInteractiveLogonRight
+        users:
+        - Administrators
+    
+    - name: Install IIS Web-Server
+      win_feature:
+        name: Web-Server
+        state: present
+        include_sub_features: true
+        include_management_tools: true
+      register: win_feature
+    
+    - name: Misconfiguration - Add webadmin to localadmin group
+      win_group_membership:
+        name: Administrators
+        members:
+          - '{{ web_admin_login }}'
+        state: present
+
+    - name: Misconfiguration - Delete default iis webapp
+      win_file:
+        path: C:\inetpub\wwwroot
+        state: absent
+    
+    - name: Misconfiguration - Import a custom webapp
+      win_copy:
+        src: wwwroot/
+        dest: C:\inetpub\wwwroot
+        
+    - name: Misconfiguration - Define authentication method
+      win_shell: |
+        Import-Module WebAdministration;
+        Set-WebConfigurationProperty -filter /system.webServer/security/authentication/anonymousAuthentication -name enabled -value false -PSPath IIS:\\ -location "Default Web Site"
+        Set-WebConfigurationProperty -filter /system.webServer/security/authentication/windowsAuthentication -name enabled -value true -PSPath IIS:\\ -location "Default Web Site"
+
+    - name: Misconfiguration - Restart IIS Service
+      win_service:
+        name: W3SVC
+        state: restarted

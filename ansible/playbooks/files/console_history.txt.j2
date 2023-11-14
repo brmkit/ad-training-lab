@@ -1,0 +1,96 @@
+Restart-Computer
+Test-Connection google.com
+Restart-Computer
+Del C:\Users\jacktest.{{domain_short}}\Desktop\get-fileshare.ps1
+Get-Alias
+Del C:\Users\jacktest.{{domain_short}}\Desktop\shoppy.docx
+pwd
+Restart-Computer
+Get-Process
+Get-Alias
+$credz = (New-Object System.Management.Automation.PSCredential '{{ web_admin_login }}', (ConvertTo-SecureString '{{ web_admin_password }}' -AsPlainText -Force))
+Invoke-WebRequest -Uri 'web.{{ domain_name }}/alert.ps1' -OutFile 'C:\alert.ps1'
+Invoke-Command -ComputerName 'WEB' -ScriptBlock { Get-Process } -Credential $credz
+Invoke-WebRequest -Uri 'web.{{ domain_name }}/delete-all.ps1' -OutFile 'C:\delete-all.ps1'
+Get-WmiObject Win32_OperatingSystem
+Get-Service
+Get-Process
+Test-Connection google.com
+pwd
+Get-Prcess
+dir
+cd C:\LAPS
+Get-PSDrive
+Get-Date
+Del C:\Users\jacktest.{{domain_short}}\Desktop\password.txt
+Get-EventLog -LogName Application
+Get-Service
+Get-NetIPAddress
+Test-Connection google.com
+Get-Alias
+Get-WmiObject Win32_OperatingSystem
+Get-PSDrive
+cd C:\
+Get-NetIPAddress
+Get-WmiObject Win32_OperatingSystem
+Get-Prcess
+Restart-Computer
+Get-ChildItem -Path C:\
+Get-Process
+Get-PSDrive
+Restart-Computer
+Get-EventLog -LogName Application
+pwd
+Restart-Computer
+Get-ChildItem -Path C:\
+Get-ChildItem -Path C:\
+Get-Service
+Restart-Computer
+Get-ChildItem -Path C:\
+dir
+dir
+Test-Connection google.com
+Get-WmiObject Win32_OperatingSystem
+cd C:\
+Test-Connection google.com
+Get-ChildItem -Path C:\
+cd C:\LAPS
+Get-EventLog -LogName Application
+cd C:\
+cd C:\LAPS
+Get-Alias
+Test-Connection google.com
+Get-PSDrive
+Test-Connection google.com
+Get-EventLog -LogName Application
+Restart-Computer
+cd C:\LAPS
+Get-ChildItem -Path C:\
+Get-Date
+Get-Prcess
+dir
+pwd
+pwd
+Get-Prcess
+Get-WmiObject Win32_OperatingSystem
+Get-ChildItem -Path C:\
+Get-PSDrive
+Get-ChildItem -Path C:\
+Get-PSDrive
+Get-Prcess
+Get-Date
+cd C:\LAPS
+dir
+Restart-Computer
+Get-Prcess
+Get-WmiObject Win32_OperatingSystem
+pwd
+pwd
+pwd
+Restart-Computer
+Get-EventLog -LogName Application
+Get-Prcess
+pwd
+pwd
+cd C:\
+Get-Service

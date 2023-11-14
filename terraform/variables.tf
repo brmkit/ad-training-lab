@@ -29,11 +29,6 @@ variable "tokenkey" {
     description = "terraform-prov secret key token"
 }
 
-variable "pm_pool" {
-    description = "change according to your infrastructure"
-    default = "training"
-}
-
 variable "storage_name" {
     default = "local-lvm"
     description = "proxmox storage name"

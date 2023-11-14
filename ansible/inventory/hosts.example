@@ -1,0 +1,28 @@
+ubuntu:
+  vars:
+    ansible_user: ubuntu
+    ansible_password: ubuntu
+    ansible_sudo_pass: ubuntu
+    ansible_shell_type: sh
+  hosts:
+    monitoring:
+      ansible_host: <ip_address>
+
+windows:
+  vars:
+    ansible_user: provision
+    ansible_password: ProvisionPassword.
+    ansible_shell_type: cmd
+  hosts:
+    DC:
+      ansible_host: <ip_address>
+    FS:
+      ansible_host: <ip_address>
+    WEB:
+      ansible_host: <ip_address>
+    WS1:
+      ansible_host: <ip_address>
+    WS2:
+      ansible_host: <ip_address>
+
+# fill and rename in hosts.yml

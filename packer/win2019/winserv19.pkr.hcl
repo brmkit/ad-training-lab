@@ -13,21 +13,22 @@ packer {
 
 source "proxmox-iso" "traininglab-win2019" {
   proxmox_url  = "https://${var.proxmox_node}:8006/api2/json"
-  node         = "${var.proxmox_hostname}"
-  username     = "${var.proxmox_api_id}"
-  token        = "${var.proxmox_api_token}"
-  iso_file                 = "local:iso/win2019_server.iso"
-  insecure_skip_tls_verify = true
-  unmount_iso = true
+  node         = var.proxmox_hostname
+  username     = var.proxmox_api_id
+  token        = var.proxmox_api_token
+  iso_file     = "local:iso/win2019_server.iso"
   communicator             = "ssh"
-  ssh_username             = "${var.lab_username}"
-  ssh_password             = "${var.lab_password}"
+  ssh_username             = var.lab_username
+  ssh_password             = var.lab_password
   ssh_timeout              = "30m"
   qemu_agent               = true
   cores                    = 6
   memory                   = 8192
   vm_name                  = "traininglab-win2019"
+  tags                     = "traininglab-win2019"
   template_description     = "TrainingLab WindowsServer Template - Sysprep done"
+  insecure_skip_tls_verify = true
+  unmount_iso = true
 
   additional_iso_files {
     cd_files =["autounattend.xml"]

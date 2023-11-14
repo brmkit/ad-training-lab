@@ -1,0 +1,92 @@
+- name: CONFIGURING WORKSTATION 1
+  hosts: WS1
+  gather_facts: no
+  tasks:
+    - name: Rename server
+      win_hostname:
+        name: "{{ inventory_hostname }}"
+      register: rename
+      
+    - name: Reboot after rename
+      win_reboot:
+      when: rename.reboot_required
+      
+    - name: Set DNS to Domain Controller
+      win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+        - "{{ hostvars['DC']['ansible_host'] }}"
+      
+    - name: Join Domain
+      win_domain_membership:
+        dns_domain_name: "{{ domain_name }}"
+        domain_admin_user: Administrator@{{ domain_name }}
+        domain_admin_password: "{{ domain_admin_password }}"
+        state: domain
+      register: wsjoined
+
+    - name: Reboot after join
+      win_reboot:
+      when: wsjoined.reboot_required
+
+    - name: Allow RDP to specific users
+      ansible.windows.win_user_right:
+        name: SeRemoteInteractiveLogonRight
+        users:
+        - Administrators
+        - Remote Desktop Users
+
+    - name: Map shared folder
+      community.windows.win_mapped_drive:
+        letter: 'Z'
+        path: \\fs.{{ domain_name }}\SharedFolder
+        state: present
+        
+    - name: Misconfiguration - Add user to rdp group
+      win_group_membership:
+        name: Remote Desktop Users
+        members:
+          - '{{ first_user_login }}'
+        state: present
+
+    - name: Misconfiguration - Create directory structure prerequisite
+      win_file:
+        path: C:\Program Files\Remote Tools\
+        state: directory
+
+    - name: Misconfiguration - Add Unquothed Service Path
+      win_service:
+        name: Internal Management Service
+        path: C:\Program Files\Remote Tools\itman.exe
+        display_name: ItManSvc
+        description: Internal Management Service for Administrative Tasks
+        failure_actions:
+        - type: restart 
+          delay_ms: 60000
+        - type: none
+
+    - name: Misconfiguration - Compile a dummy binary
+      local_action:
+        module: shell
+        args:
+          cmd: mcs -out:itman.exe itman.cs
+          chdir: files/
+          executable: /bin/bash
+      vars:
+        ansible_shell_type: sh
+
+    - name: Misconfiguration - Move a dummy binary
+      win_copy:
+        src: itman.exe
+        dest: C:\Program Files\Remote Tools\itman.exe
+        force: yes
+
+    - name: Misconfiguration - Run a command with a Server Admins process
+      local_action:
+        module: shell
+        args:
+          cmd: DISPLAY=:0 nohup gnome-terminal -- sshpass -p {{ server_admin_password }} ssh {{ server_admin_ssh }}@{{ hostvars['WS1']['ansible_host'] }} "C:\Program Files\Remote Tools\itman.exe" </dev/null >/dev/null 2>&1 &
+          executable: /bin/bash
+      vars:
+        ansible_shell_type: sh
+      # this tasks run a local shell, open an ssh session on ws1, than launch a command - itman.exe (just a simple binary) than crash

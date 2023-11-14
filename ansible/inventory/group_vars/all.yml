@@ -1,0 +1,25 @@
+ansible_connection: ssh
+domain_short: RED
+domain_name: '{{ domain_short|lower }}lab.local'
+
+domain_admin_login: '{{ domain_short }}\Administrator'
+domain_admin_ssh: '{{ domain_short }}\\Administrator'
+domain_admin_password: DomainAdminPassword.
+safe_mode_pass: SafeModePassword.
+
+# used for vulns
+server_admin: 'jeffadmin'
+web_admin: 'webadmin'
+first_user: 'jacktest'
+
+first_user_login: '{{ domain_short }}\{{ first_user }}'
+first_user_ssh: '{{ domain_short }}\{{ first_user }}'
+first_user_password: 'Password1!'
+
+server_admin_login: '{{ domain_short }}\{{ server_admin }}'
+server_admin_ssh: '{{ domain_short }}\\{{ server_admin }}'
+server_admin_password: GuessMyPassPls!
+
+web_admin_login: '{{ domain_short}}\webadmin'
+web_admin_ssh: '{{ domain_short}}\\webadmin'
+web_admin_password: 'just4Pass!'

@@ -1,0 +1,22 @@
+ubuntu:
+  vars:
+    ansible_user: ubuntu
+    ansible_password: ubuntu
+    ansible_sudo_pass: ubuntu
+    ansible_shell_type: sh
+  hosts:
+%{ for name, ip in ubuntu_ips ~}
+    ${name}:
+      ansible_host: ${ip}
+%{ endfor ~}
+
+windows:
+  vars:
+    ansible_user: provision
+    ansible_password: ProvisionPassword.
+    ansible_shell_type: cmd
+  hosts:
+%{ for name, ip in windows_ips ~}
+    ${name}:
+      ansible_host: ${ip}
+%{ endfor ~}

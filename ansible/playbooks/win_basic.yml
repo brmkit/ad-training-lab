@@ -1,11 +1,11 @@
 # just a workaround :)
 ---
-- name: Doing some magic to prepare windows hosts
-  hosts: domain_controller, workstations, fileserver
-  gather_facts: yes
+- name: SOME MAGIC...
+  hosts: windows
+  gather_facts: no
   tasks:
-  - name: Disable Hibernation using win_regedit
-    ansible.windows.win_regedit:
+  - name: Disable Hibernation 1
+    win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Power
       name: HibernateFileSizePercent
       data: 0
@@ -13,10 +13,18 @@
       state: present
     register: deactive
       
-  - name: Disable Hibernation using win_regedit
-    ansible.windows.win_regedit:
+  - name: Disable Hibernation 2
+    win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Power
       name: HibernateEnabled
+      data: 0
+      datatype: dword
+      state: present
+
+  - name: Disable First Logon Animations
+    win_regedit:
+      path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System
+      name: EnableFirstLogonAnimation
       data: 0
       datatype: dword
       state: present
@@ -26,15 +34,8 @@
       script: |
         Set-MpPreference -MAPSReporting 0; Set-MpPreference -SubmitSamplesConsent 2; Set-MpPreference -DisableRealtimeMonitoring $true; Set-MpPreference -DisableScanningMappedNetworkDrivesForFullScan $true
 
-  - name: Allow Remote Desktop Users to use RDP
-    ansible.windows.win_user_right:
-      name: SeRemoteInteractiveLogonRight
-      users:
-      - Administrators
-      - Remote Desktop Users
-
   - name: Allow RDP Connections
-    ansible.windows.win_regedit:
+    win_regedit:
       path: HKLM:\System\CurrentControlSet\Control\Terminal Server
       name: fDenyTSConnections
       data: 0
@@ -52,5 +53,5 @@
       enabled: yes
 
   - name: Reboot before domain creation
-    ansible.windows.win_reboot:
+    win_reboot:
     when: deactive.changed
