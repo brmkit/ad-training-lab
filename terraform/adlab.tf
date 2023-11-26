@@ -1,4 +1,3 @@
-##################### PROVIDER BLOCK #####################
 terraform {
   required_providers {
     proxmox = {
@@ -47,8 +46,6 @@ locals {
     disk_size = 60
   }
 }
-
-##################### RESOURCE BLOCK #####################
 
 resource "proxmox_virtual_environment_vm" "vm" {
   for_each = {
