@@ -31,7 +31,6 @@ terraform.rc
 
 ### VisualStudioCode ###
 .vscode/*
-!.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -40,3 +39,4 @@ terraform.rc
 *.vsix
 .history
 .ionide
+.vscode/settings.json

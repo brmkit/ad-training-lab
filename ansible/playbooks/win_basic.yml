@@ -32,7 +32,7 @@
   - name: Disable windows defender sending sample
     ansible.windows.win_powershell: 
       script: |
-        Set-MpPreference -MAPSReporting 0; Set-MpPreference -SubmitSamplesConsent 2; Set-MpPreference -DisableRealtimeMonitoring $true; Set-MpPreference -DisableScanningMappedNetworkDrivesForFullScan $true
+        Set-MpPreference -MAPSReporting 0; Set-MpPreference -SubmitSamplesConsent 2;
 
   - name: Allow RDP Connections
     win_regedit:
