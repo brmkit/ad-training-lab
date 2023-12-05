@@ -49,37 +49,49 @@
           - '{{ first_user_login }}'
         state: present
 
-    - name: Misconfiguration - Create directory structure prerequisite
-      win_file:
-        path: C:\Program Files\Remote Tools\
-        state: directory
-
-    - name: Misconfiguration - Add Unquothed Service Path
-      win_service:
-        name: Internal Management Service
-        path: C:\Program Files\Remote Tools\itman.exe
-        display_name: ItManSvc
-        description: Internal Management Service for Administrative Tasks
-        failure_actions:
-        - type: restart 
-          delay_ms: 60000
-        - type: none
-
     - name: Misconfiguration - Compile a dummy binary
       local_action:
         module: shell
         args:
-          cmd: mcs -out:itman.exe itman.cs
+          cmd: mcs -reference:System.ServiceProcess.dll -out:itman.exe itman.cs
           chdir: files/
           executable: /bin/bash
       vars:
         ansible_shell_type: sh
 
+    - name: Misconfiguration - Create directory structure prerequisite
+      win_file:
+        path: C:\Program Files\Remoting\Service Binary
+        state: directory
+
     - name: Misconfiguration - Move a dummy binary
       win_copy:
         src: itman.exe
-        dest: C:\Program Files\Remote Tools\itman.exe
+        dest: C:\Program Files\Remoting\Service Binary\itman.exe
         force: yes
+
+    - name: Misconfiguration - Add Unquothed Service Path
+      win_service:
+        name: ItManSvc
+        path: C:\Program Files\Remoting\Service Binary\itman.exe
+        display_name: ItManSvc
+        description: Internal Management Service for Administrative Tasks
+        start_mode: auto
+        failure_actions:
+        - type: restart 
+          delay_ms: 60000
+        - type: none
+
+    - name: Misconfiguration - Set service permissions
+      win_shell: sc.exe sdset ItManSvc 'D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;RPWPCR;;;DU)'
+    
+    - name: Misconfiguration - I want more...
+      win_acl:
+        path: C:\Program Files\Remoting
+        rights: WriteData
+        state: present
+        type: allow
+        user: Authenticated Users
 
     - name: Misconfiguration - Run a command with a Server Admins process
       local_action:

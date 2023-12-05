@@ -1,10 +1,35 @@
 using System;
+using System.ServiceProcess;
 
-namespace itman {
-    class Program {
-        public static void Main (string[] args) {
-            Console.WriteLine ("yeah, it's up to you define what i'm really doing here");
-            Console.ReadKey ();
+namespace itmansvc
+{
+    class Program : ServiceBase
+    {
+        static void Main(string[] args)
+        {
+            ServiceBase[] ServicesToRun;
+            ServicesToRun = new ServiceBase[]
+            {
+                new Program()
+            };
+            ServiceBase.Run(ServicesToRun);
+        }
+
+        public Program()
+        {
+            ServiceName = "itmansvc";
+        }
+
+        protected override void OnStart(string[] args)
+        {
+            Console.WriteLine("yeah, it's up to you to define what i'm really doing here.");
+            base.OnStart(args);
+        }
+
+        protected override void OnStop()
+        {
+            Console.WriteLine("done.");
+            base.OnStop();
         }
     }
 }
