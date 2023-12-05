@@ -42,25 +42,21 @@
         path: \\fs.{{ domain_name }}\SharedFolder
         state: present
 
+    - name: WORKAROUND - Create user's folder structure
+      win_copy:
+        src: C:\Users\Default
+        dest: C:\Users\{{ first_user }}
+        remote_src:
+
     - name: Misconfiguration - Create directory structure prerequisite
       win_file:
-        path: C:\Users\{{ first_user }}.{{ domain_short }}\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine
+        path: C:\Users\{{ first_user }}\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine
         state: directory
-
-    - name: Misconfiguration - Just a command to create user's folders structure
-      local_action:
-        module: shell
-        args:
-          cmd: DISPLAY=:0 nohup gnome-terminal -- sshpass -p {{ first_user_password }} ssh {{ first_user_ssh}}@{{ hostvars['WS2']['ansible_host'] }} "whoami" </dev/null >/dev/null 2>&1 &
-          executable: /bin/bash
-      vars:
-        ansible_shell_type: sh
-
-# sometimes gets weird
+ 
     - name: Misconfiguration - Generate a special Console History file
       ansible.windows.win_template:
         src: files/console_history.txt.j2
-        dest: C:\Users\{{ first_user }}.{{ domain_short }}\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+        dest: C:\Users\{{ first_user }}\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
 
     - name: Misconfiguration - Add user to rdp group
       win_group_membership:
