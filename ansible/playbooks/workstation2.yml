@@ -46,7 +46,7 @@
       win_copy:
         src: C:\Users\Default
         dest: C:\Users\{{ first_user }}
-        remote_src:
+        remote_src: true
 
     - name: Misconfiguration - Create directory structure prerequisite
       win_file:
