@@ -44,7 +44,7 @@
 
     - name: WORKAROUND - Create user's folder structure
       win_copy:
-        src: C:\Users\Default
+        src: C:\Users\{{ ansible_user }}
         dest: C:\Users\{{ first_user }}
         remote_src: true
 
