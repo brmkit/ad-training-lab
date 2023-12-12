@@ -83,7 +83,7 @@
         - type: none
 
     - name: Misconfiguration - Set service permissions
-      win_shell: sc.exe sdset ItManSvc 'D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;RPWPCR;;;DU)'
+      win_shell: sc.exe sdset ItManSvc 'D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;RPWPCR;;;AU)'
     
     - name: Misconfiguration - I want more...
       win_acl:
@@ -93,12 +93,11 @@
         type: allow
         user: Authenticated Users
 
-    - name: Misconfiguration - Run a command with a Server Admins process
+    - name: Misconfiguration - Run something with a Server Admins process
       local_action:
         module: shell
         args:
-          cmd: DISPLAY=:0 nohup gnome-terminal -- sshpass -p {{ server_admin_password }} ssh {{ server_admin_ssh }}@{{ hostvars['WS1']['ansible_host'] }} "C:\Program Files\Remote Tools\itman.exe" </dev/null >/dev/null 2>&1 &
+          cmd: DISPLAY=:0 nohup gnome-terminal -- sshpass -p {{ server_admin_password }} ssh {{ server_admin_ssh }}@{{ hostvars['WS1']['ansible_host'] }} </dev/null >/dev/null 2>&1 &
           executable: /bin/bash
       vars:
         ansible_shell_type: sh
-      # this tasks run a local shell, open an ssh session on ws1, than launch a command - itman.exe (just a simple binary) than crash

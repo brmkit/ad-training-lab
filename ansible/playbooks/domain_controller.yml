@@ -47,7 +47,7 @@
     - name: Configure DNS forwarders
       ansible.windows.win_powershell:
         script: |
-          Set-DNSServerForwarder -IPAddress {{ hostvars['DC']['ansible_host'] }}
+          Set-DNSServerForwarder -IPAddress {{ dns_forwarders }}
 
     - name: Allow RDP to specific users
       ansible.windows.win_user_right:
