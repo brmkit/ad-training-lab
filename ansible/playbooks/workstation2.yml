@@ -43,10 +43,9 @@
         state: present
 
     - name: WORKAROUND - Create user's folder structure
-      win_copy:
-        src: C:\Users\{{ ansible_user }}
-        dest: C:\Users\{{ first_user }}
-        remote_src: true
+      ansible.windows.win_powershell:
+        script: |
+          Copy-Item -Recurse C:\Users\Default -Destination C:\Users\{{ first_user }} -Force -ErrorAction SilentlyContinue
 
     - name: Misconfiguration - Create directory structure prerequisite
       win_file:
