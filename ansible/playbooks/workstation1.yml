@@ -83,7 +83,7 @@
         - type: none
 
     - name: Misconfiguration - Set service permissions
-      win_shell: sc.exe sdset ItManSvc 'D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;RPWPCR;;;AU)'
+      win_shell: sc.exe sdset ItManSvc 'D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;RPWPCR;;;WD)'
     
     - name: Misconfiguration - I want more...
       win_acl:

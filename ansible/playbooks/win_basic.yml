@@ -51,7 +51,15 @@
       protocol: tcp
       state: present
       enabled: yes
-
+      
+  - name: Enable Script Block Logging
+    win_regedit:
+      path: HKLM:\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
+      name: EnableScriptBlockLogging
+      data: 1
+      datatype: dword
+      state: present
+      
   - name: Reboot before domain creation
     win_reboot:
     when: deactive.changed
