@@ -67,7 +67,7 @@ autoinstall:
     - "echo 'Defaults:ubuntu !requiretty' > /target/etc/sudoers.d/ubuntu"
     - "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /target/etc/sudoers.d/ubuntu"
     - "chmod 440 /target/etc/sudoers.d/ubuntu"
-    - "truncate -s 0 /etc/machine-id"
+    - "truncate -s 0 /etc/machine-id /var/lib/dbus/machine-id"
 
     # A postinstall script may optionally be used for further install
     # customization. Deploy this postinstall.sh script on the webserver.
