@@ -41,6 +41,10 @@ pveum user token add userprovisioner@pve provisioner-token --privsep=0
 pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin --token userprovisioner@pve\!provisioner-token
 ```
 **you have to save the output somewhere, it's needed!**
+4. download virtio-win iso
+```bash
+wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/vz/template/iso/virtio-win.iso
+```
 
 ### Deploy
 1. Create a VM (ubuntu-desktop) inside your Proxmox hosts and ssh into it
