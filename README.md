@@ -65,6 +65,8 @@ The infrastructure is designed to be simple and use few resources, you can add a
 
 - **DC**: Windows Server 2019 with AD roles installed.
 
+- **ADCS:** Windows Server 2019 server with ADCS role installed.
+
 - **FS:** Windows Server 2019 server with FS-FileServer role installed.
 
 - **WEB:** Windows Server 2019 server with IIS Installed
