@@ -16,13 +16,19 @@ source "proxmox-iso" "traininglab-ws" {
   node         = var.proxmox_hostname
   username     = var.proxmox_api_id
   token        = var.proxmox_api_token
-  iso_file     = "local:iso/win10_ltsc.iso"
+  
+  #iso_file     = "local:iso/win10_ltsc.iso" -- uncomment if you want to use local iso file and comment the next tree lines
+  iso_checksum             = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
+  iso_url                  = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
+  iso_storage_pool         = "local"
+
   communicator             = "ssh"
   ssh_username             = var.lab_username
   ssh_password             = var.lab_password
   ssh_timeout              = "30m"
   qemu_agent               = true
   cores                    = 6
+  cpu_type                  = "host"
   memory                   = 8192
   vm_name                  = "traininglab-ws"
   tags                     = "traininglab-ws"

@@ -16,13 +16,19 @@ source "proxmox-iso" "traininglab-win2019" {
   node         = var.proxmox_hostname
   username     = var.proxmox_api_id
   token        = var.proxmox_api_token
-  iso_file     = "local:iso/win2019_server.iso"
+  
+  #iso_file     = "local:iso/win2019_server.iso" -- uncomment if you want to use local iso file and comment the next tree lines
+  iso_checksum             = "sha256:69efac1df9ec8066341d8c9b62297ddece0e6b805533fdb6dd66bc8034fba27a"
+  iso_url                  = "https://software-download.microsoft.com/download/sg/444969d5-f34g-4e03-ac9d-1f9786c69161/19044.1288.211006-0501.21h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.isoo"
+  iso_storage_pool         = "local"
+
   communicator             = "ssh"
   ssh_username             = var.lab_username
   ssh_password             = var.lab_password
   ssh_timeout              = "30m"
   qemu_agent               = true
   cores                    = 6
+  cpu_type                  = "host"
   memory                   = 8192
   vm_name                  = "traininglab-win2019"
   tags                     = "traininglab-win2019"
