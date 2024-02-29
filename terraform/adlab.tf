@@ -51,6 +51,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   for_each = {
     monitoring = local.vm_id_templates.ubuntu
     DC         = local.vm_id_templates.win2019
+    ADCS       = local.vm_id_templates.win2019
     FS         = local.vm_id_templates.win2019
     WEB        = local.vm_id_templates.win2019
     WS1        = local.vm_id_templates.workstation
@@ -109,6 +110,7 @@ output "ansible_inventory" {
     windows_ips = {
       "DC"  = proxmox_virtual_environment_vm.vm["DC"].ipv4_addresses[0][0]
       "FS"  = proxmox_virtual_environment_vm.vm["FS"].ipv4_addresses[0][0]
+      "ADCS" = proxmox_virtual_environment_vm.vm["ADCS"].ipv4_addresses[0][0]
       "WEB" = proxmox_virtual_environment_vm.vm["WEB"].ipv4_addresses[0][0]
       "WS1" = proxmox_virtual_environment_vm.vm["WS1"].ipv4_addresses[0][0]
       "WS2" = proxmox_virtual_environment_vm.vm["WS2"].ipv4_addresses[0][0]
