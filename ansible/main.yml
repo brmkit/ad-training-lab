@@ -5,6 +5,7 @@
 - import_playbook: playbooks/win_basic.yml
 - import_playbook: playbooks/domain_controller.yml
 - import_playbook: playbooks/fileserver.yml
+- import_playbook: playbooks/adcs.yml
 - import_playbook: playbooks/webserver.yml
 - import_playbook: playbooks/workstation1.yml
 - import_playbook: playbooks/workstation2.yml

@@ -18,6 +18,8 @@ windows:
       ansible_host: <ip_address>
     FS:
       ansible_host: <ip_address>
+    ADCS:
+      ansible_host: <ip_address>
     WEB:
       ansible_host: <ip_address>
     WS1:

@@ -18,16 +18,17 @@
         - "{{ hostvars['DC']['ansible_host'] }}"
       
     - name: Join Domain
-      win_domain_membership:
+      microsoft.ad.membership:
         dns_domain_name: "{{ domain_name }}"
         domain_admin_user: Administrator@{{ domain_name }}
         domain_admin_password: "{{ domain_admin_password }}"
         state: domain
-      register: wsjoined
-
-    - name: Reboot after join
-      win_reboot:
-      when: wsjoined.reboot_required
+        reboot: true
+  
+    - name: Set autologon for specific user
+      community.windows.win_auto_logon:
+        username: '{{ server_admin_login }}'
+        password: '{{ server_admin_password }}'
 
     - name: Allow RDP to specific users
       ansible.windows.win_user_right:
@@ -92,12 +93,3 @@
         state: present
         type: allow
         user: Authenticated Users
-
-    - name: Misconfiguration - Run something with a Server Admins process
-      local_action:
-        module: shell
-        args:
-          cmd: DISPLAY=:0 nohup gnome-terminal -- sshpass -p {{ server_admin_password }} ssh {{ server_admin_ssh }}@{{ hostvars['WS1']['ansible_host'] }} </dev/null >/dev/null 2>&1 &
-          executable: /bin/bash
-      vars:
-        ansible_shell_type: sh

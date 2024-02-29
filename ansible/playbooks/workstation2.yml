@@ -18,16 +18,12 @@
         - "{{ hostvars['DC']['ansible_host'] }}"
       
     - name: Join Domain
-      win_domain_membership:
+      microsoft.ad.membership:
         dns_domain_name: "{{ domain_name }}"
         domain_admin_user: Administrator@{{ domain_name }}
         domain_admin_password: "{{ domain_admin_password }}"
         state: domain
-      register: wsjoined
-      
-    - name: Reboot after join
-      win_reboot:
-      when: wsjoined.reboot_required
+        reboot: true
 
     - name: Allow RDP to specific users
       ansible.windows.win_user_right:

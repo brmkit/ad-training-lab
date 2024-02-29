@@ -1,0 +1,51 @@
+---
+- name: CONFIGURING CERTIFICARE SERVICES
+  hosts: ADCS
+  gather_facts: no
+  tasks:
+    - name: Rename server
+      win_hostname:
+        name: "{{ inventory_hostname }}"
+      register: rename
+      
+    - name: Reboot after rename
+      win_reboot:
+      when: rename.reboot_required
+      
+    - name: Set DNS to Domain Controller
+      win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+        - "{{ hostvars['DC']['ansible_host'] }}"
+
+    - name: Join Domain
+      microsoft.ad.membership:
+        dns_domain_name: "{{ domain_name }}"
+        domain_admin_user: Administrator@{{ domain_name }}
+        domain_admin_password: "{{ domain_admin_password }}"
+        state: domain
+        reboot: true
+  
+    - name: Install ADCS
+      win_feature:
+        name:
+        - AD-Certificate
+        - ADCS-Cert-Authority
+        - ADCS-Online-Cert
+        - ADCS-Web-Enrollment
+        - RSAT-Role-Tools
+        state: present
+        include_sub_features: yes
+        include_management_tools: yes
+      register: win_feature
+
+    - name: Reboot after ADCS prerequisite install
+      ansible.windows.win_reboot:
+      when: win_feature.reboot_required
+
+    - name: Install ADCS CA full-command
+      win_command: |
+        Install-AdcsCertificationAuthority -CAType EnterpriseRootCA -CryptoProviderName "RSA#Microsoft Software Key Storage Provider" -KeyLength 2048 -HashAlgorithmName SHA256 -ValidityPeriod Years -ValidityPeriodUnits 5 -CACommonName {{ ca_name }} -CADistinguishedNameSuffix {{ distinguished_name }} -Force
+      vars:
+        ansible_become_pass: "{{ domain_admin_login }}"
+        ansible_become_user: "{{ domain_admin_password }}"
