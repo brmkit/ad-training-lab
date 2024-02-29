@@ -42,15 +42,6 @@ pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin 
 ```
 **you have to save the output somewhere, it's needed!**
 
-4. download necessary isos
-``` bash
-# run on proxmox server shell
-wget https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-live-server-amd64.iso -O /var/lib/vz/template/iso/ubuntu_server.iso
-wget https://go.microsoft.com/fwlink/p/?LinkID=2208844&clcid=0x409&culture=en-us&country=US -O /var/lib/vz/template/iso/win10_ltsc.iso
-wget https://go.microsoft.com/fwlink/p/?LinkID=2195167&clcid=0x409&culture=en-us&country=US -O /var/lib/vz/template/iso/win2019_server.iso
-wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/vz/template/iso/virtio-win.iso
-```
-
 ### Deploy
 1. Create a VM (ubuntu-desktop) inside your Proxmox hosts and ssh into it
 2. `git clone <repo>` 
@@ -99,8 +90,10 @@ Below are the credentials used in the environment:
 ## TODO
 - [x] remove the manually-iso-uploads part.
 - [x] i know, the ansible part needs some improvement, i'm working on it.
-- [ ] let packer do the iso downloading with the iso_url option
-- [ ] convert ansible tasks using *microsoft.ad* ansible collection
+- [x] let packer do the iso downloading with the iso_url option
+- [x] convert ansible tasks using *microsoft.ad* ansible collection
+- [x] add ADCS template and basic ansible configuration
+- [ ] implement some basic ESCx
 - [ ] move monitoring on elk + elastic_agent (?)
 - [ ] add user simulation ([GHOSTS](https://github.com/cmu-sei/GHOSTS) or similar).
 

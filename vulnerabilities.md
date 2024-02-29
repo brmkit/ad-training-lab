@@ -8,3 +8,4 @@ This is just a recap more for myself than anyone would use this repo, here you c
 | WS1        | - vulnerable service<br>- command running as another user                                |
 | WS2        | - plaintext credentials somewhere<br>- jacktest is localadmin<br>- wmi enabled but...    |
 | MONITORING | just a wazuh server with a pretty web interface                                          |
+| ADCS       | *there's no specific vulns - temporary                                                   |
