@@ -18,8 +18,8 @@ source "proxmox-iso" "traininglab-ws" {
   token        = var.proxmox_api_token
   
   #iso_file     = "local:iso/win10_ltsc.iso" -- uncomment if you want to use local iso file and comment the next tree lines
-  iso_checksum             = "sha256:69efac1df9ec8066341d8c9b62297ddece0e6b805533fdb6dd66bc8034fba27a"
-  iso_url                  = "https://software-download.microsoft.com/download/sg/444969d5-f34g-4e03-ac9d-1f9786c69161/19044.1288.211006-0501.21h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.isoo"
+  iso_checksum             = "sha256:ef7312733a9f5d7d51cfa04ac497671995674ca5e1058d5164d6028f0938d668"
+  iso_url                  = "https://software-download.microsoft.com/download/988969d5-f34g-4e03-ac9d-1f9786c66750/19045.2006.220908-0225.22h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
   iso_storage_pool         = "local"
 
   communicator             = "ssh"
