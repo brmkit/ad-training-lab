@@ -27,7 +27,7 @@ requirements(){
     sudo apt install -qq -y python3 python3-pip unzip mkisofs sshpass terraform packer mono-complete
 
     pip3 install ansible pywinrm jmespath
-    ansible-galaxy collection install community.windows
+    ansible-galaxy collection install community.windows microsoft.ad
 
 }
 
