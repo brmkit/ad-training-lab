@@ -36,6 +36,7 @@ source "proxmox-iso" "traininglab-ws" {
   template_description     = "TrainingLab Workstation Template"
   insecure_skip_tls_verify = true
   unmount_iso = true
+  task_timeout = "30m"
 
   additional_iso_files {
     cd_files =["autounattend.xml"]
@@ -59,7 +60,10 @@ source "proxmox-iso" "traininglab-ws" {
     type              = "virtio"
     disk_size         = "50G"
     storage_pool = var.storage_name
+    cache_mode = "writeback"
+    discard = true
   }
+  
   scsi_controller = "virtio-scsi-pci"
 }
 

@@ -19,7 +19,6 @@ source "proxmox-iso" "traininglab-server" {
   iso_storage_pool         = "local"
   iso_download_pve = true
 
-
   communicator             = "ssh"
   ssh_username             = var.lab_username
   ssh_password             = var.lab_password
@@ -33,6 +32,7 @@ source "proxmox-iso" "traininglab-server" {
   template_description     = "TrainingLab Ubuntu Server Template"
   insecure_skip_tls_verify = true
   unmount_iso = true
+  task_timeout = "30m"
   http_directory           = "server"   # or server files inside the http folder on a container inside proxmox host
 
   additional_iso_files {

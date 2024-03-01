@@ -23,7 +23,6 @@ source "proxmox-iso" "traininglab-win2019" {
   iso_storage_pool         = "local"
   iso_download_pve = true
 
-
   communicator             = "ssh"
   ssh_username             = var.lab_username
   ssh_password             = var.lab_password
@@ -37,6 +36,7 @@ source "proxmox-iso" "traininglab-win2019" {
   template_description     = "TrainingLab WindowsServer Template - Sysprep done"
   insecure_skip_tls_verify = true
   unmount_iso = true
+  task_timeout = "30m"
 
   additional_iso_files {
     cd_files =["autounattend.xml"]
@@ -51,7 +51,6 @@ source "proxmox-iso" "traininglab-win2019" {
     unmount      = true
   }
 
-
   network_adapters {
     bridge = var.netbridge
   }
@@ -60,7 +59,10 @@ source "proxmox-iso" "traininglab-win2019" {
     type              = "virtio"
     disk_size         = "50G"
     storage_pool = var.storage_name
+    cache_mode = "writeback"
+    discard = true
   }
+
   scsi_controller = "virtio-scsi-pci"
 }
 
