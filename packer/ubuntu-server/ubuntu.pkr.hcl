@@ -49,11 +49,14 @@ source "proxmox-iso" "traininglab-server" {
     bridge = var.netbridge
     }
 
+  scsi_controller = "virtio-scsi-single"
+
   disks {
     disk_size    = "30G"
     storage_pool = var.storage_name
     type         = "scsi"
-
+    discard      = true
+    io_thread     = true
   }
   boot_wait = "10s"
 

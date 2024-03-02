@@ -20,7 +20,7 @@ resource "proxmox_virtual_environment_pool" "training_pool" {
   pool_id = "TRAINING"
 }
 
-data "proxmox_virtual_environment_vms" "ubuntu" {
+data "proxmox_virtual_environment_vms" "server" {
   tags      = ["traininglab-server"]
 }
 
@@ -83,7 +83,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   disk {
-    interface    = "virtio0"
+    interface    = "scsi0"
     file_format = "raw"
     size    = local.default_vm_config.disk_size
     datastore_id = var.storage_name

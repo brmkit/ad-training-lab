@@ -9,6 +9,8 @@ domain_admin_ssh: '{{ domain_short }}\\Administrator'
 domain_admin_password: DomainAdminPassword.
 safe_mode_pass: SafeModePassword.
 
+ca_name: '{{ domain_short }}-CA'
+
 # used for vulns
 server_admin: 'jeffadmin'
 web_admin: 'webadmin'

@@ -56,14 +56,14 @@ source "proxmox-iso" "traininglab-win2019" {
   }
 
   disks {
-    type              = "virtio"
+    type              = "scsi"
     disk_size         = "50G"
     storage_pool = var.storage_name
-    cache_mode = "writeback"
     discard = true
+    io_thread = true
   }
 
-  scsi_controller = "virtio-scsi-pci"
+  scsi_controller = "virtio-scsi-single"
 }
 
 
@@ -71,11 +71,7 @@ build {
   sources = ["sources.proxmox-iso.traininglab-win2019"]
   
   provisioner "windows-update" {
-    search_criteria = "BrowseOnly=0 and IsInstalled=0"
-    filters = [
-      "exclude:$_.Title -like '*Preview*'",
-      "include:$true",
-    ]
+    search_criteria = "AutoSelectOnWebSites=1 and IsInstalled=0"
     update_limit = 25
   }
 

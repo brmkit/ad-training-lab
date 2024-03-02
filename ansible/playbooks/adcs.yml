@@ -1,5 +1,5 @@
 ---
-- name: CONFIGURING CERTIFICARE SERVICES
+- name: CONFIGURING CERTIFICATE SERVICES
   hosts: ADCS
   gather_facts: no
   tasks:
@@ -43,9 +43,44 @@
       ansible.windows.win_reboot:
       when: win_feature.reboot_required
 
-    - name: Install ADCS CA full-command
-      win_command: |
-        Install-AdcsCertificationAuthority -CAType EnterpriseRootCA -CryptoProviderName "RSA#Microsoft Software Key Storage Provider" -KeyLength 2048 -HashAlgorithmName SHA256 -ValidityPeriod Years -ValidityPeriodUnits 5 -CACommonName {{ ca_name }} -CADistinguishedNameSuffix {{ distinguished_name }} -Force
-      vars:
-        ansible_become_pass: "{{ domain_admin_login }}"
-        ansible_become_user: "{{ domain_admin_password }}"
+# taken from https://github.com/Orange-Cyberdefense/GOAD/blob/main/ansible/roles/adcs/tasks/main.yml
+# it seems the only way
+
+    - name: Install-ADCSCertificationAuthority-PS
+      win_powershell:
+        script: |
+          [CmdletBinding()]
+          param (
+              [String]
+              $da_login,
+
+              [String]
+              $da_pass
+          )
+          $pass = ConvertTo-SecureString $da_pass -AsPlainText -Force
+          $Cred = New-Object System.Management.Automation.PSCredential ($da_login, $pass)
+          try {
+            Install-AdcsCertificationAuthority -Credential $Cred -CAType EnterpriseRootCA -CryptoProviderName "RSA#Microsoft Software Key Storage Provider" -KeyLength 2048 -HashAlgorithmName SHA256 -ValidityPeriod Years -ValidityPeriodUnits 5 -CACommonName "{{ ca_name }}" -Force
+            $Ansible.Changed = $true
+          } catch {
+            $Ansible.Changed = $false
+          }
+        error_action: stop
+        parameters:
+          da_login: "{{ domain_admin_login }}"
+          da_pass: "{{ domain_admin_password }}"
+
+    - name: Enable Web Enrollement
+      win_powershell:
+        script: |
+          [CmdletBinding()]
+          param ()
+          try {
+            Install-AdcsWebEnrollment -Force
+            $Ansible.Changed = $true
+          } catch {
+            $Ansible.Changed = $false
+          }
+
+    - name: Refresh group policy
+      win_command: gpupdate /force
