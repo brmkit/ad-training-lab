@@ -48,7 +48,8 @@ source "proxmox-iso" "traininglab-ws" {
 
   additional_iso_files {
     device       = "sata0"
-    iso_file     = "local:iso/virtio-win.iso"
+    iso_url     = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso"
+    iso_checksum = "none"
     unmount      = true
   }
 
