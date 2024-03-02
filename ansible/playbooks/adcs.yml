@@ -47,7 +47,7 @@
 # it seems the only way
 
     - name: Install-ADCSCertificationAuthority-PS
-      win_powershell:
+      ansible.windows.win_powershell:
         script: |
           [CmdletBinding()]
           param (
@@ -71,7 +71,7 @@
           da_pass: "{{ domain_admin_password }}"
 
     - name: Enable Web Enrollement
-      win_powershell:
+      ansible.windows.win_powershell:
         script: |
           [CmdletBinding()]
           param ()
