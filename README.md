@@ -43,6 +43,7 @@ pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin 
 
 4. download virtio-win iso
 ```bash
+# run on proxmox server shell
 wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/vz/template/iso/virtio-win.iso
 ```
 
