@@ -14,7 +14,7 @@ This is a simple way to deploy a ~~minimal active directory lab~~ vulnerable act
 ### A word before you begin
 I've discovered that creating a lab like this is more useful to others than just to myself. This consideration inspired me to spend time defining some basic attack paths to help beginners understand how to use a C2 and their functionalities while playing with some Active Directory stuff... without spending money.
 
-I'm not aiming to emulate the perfection of the Prolabs by Hack The Box, or the new OpenLab RTO from ZeroPointSecurity or all the beatifull scenario out there in this magic world. Instead, this lab is meant to be straightforward and accessible **for newcomers**.
+I'm not aiming to emulate the perfection of the Prolabs by Hack The Box or all the beatifull scenario out there in this magic world. Instead, this lab is meant to be straightforward and accessible **for newcomers**.
 
 If you want something like this but **way much better**:
 
@@ -23,7 +23,6 @@ If you want something like this but **way much better**:
 or... use your money :sweat_smile:
 
 - [All the HackTheBox Prolabs!](https://www.hackthebox.com/hacker/pro-labs)
-- [OpenRTO Labs](https://training.zeropointsecurity.co.uk/bundles/open-rto-lab)
 - [SlayerLab](https://slayerlabs.com/)
 - [VulnLab](https://www.vulnlab.com/)
 
