@@ -41,12 +41,6 @@ pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin 
 ```
 **you have to save the output somewhere, you need this!**
 
-4. download virtio-win iso
-```bash
-# run on proxmox server shell
-wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso -O /var/lib/vz/template/iso/virtio-win.iso
-```
-
 ### Deploy
 1. Create a VM (ubuntu-desktop) inside your Proxmox hosts and ssh into it
 2. `git clone <repo>` 
