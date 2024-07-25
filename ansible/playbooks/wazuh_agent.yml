@@ -3,12 +3,14 @@
   hosts: windows
   gather_facts: no
   tasks:
-    - name: Installing Wazuh Agent
-      args:
-        chdir: C:\Users\{{ ansible_user }}\Downloads
-      ansible.windows.win_powershell: 
-        script: |
-          Invoke-WebRequest -Uri https://packages.wazuh.com/4.x/windows/wazuh-agent-4.5.1-1.msi -OutFile ${env:tmp}\wazuh-agent.msi; msiexec.exe /i ${env:tmp}\wazuh-agent.msi /q WAZUH_MANAGER='{{ hostvars['monitoring']['ansible_host'] }}' WAZUH_REGISTRATION_SERVER='{{ hostvars['monitoring']['ansible_host'] }}' WAZUH_AGENT_GROUP='default'
+    - name: Install Wazuh Agent
+      ansible.windows.win_package:
+        path: https://packages.wazuh.com/4.x/windows/wazuh-agent-4.8.1-1.msi
+        state: present
+        arguments: >-
+          WAZUH_MANAGER='{{ hostvars['monitoring']['ansible_host'] }}'
+          WAZUH_REGISTRATION_SERVER='{{ hostvars['monitoring']['ansible_host'] }}'
+          WAZUH_AGENT_GROUP='default'
 
     - name: Start Wazuh
       win_service:
