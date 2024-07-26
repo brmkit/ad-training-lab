@@ -4,13 +4,13 @@
   gather_facts: no
   tasks:
     - name: Install Wazuh Agent
-      ansible.windows.win_package:
+      win_package:
         path: https://packages.wazuh.com/4.x/windows/wazuh-agent-4.8.1-1.msi
         state: present
         arguments: >-
-          WAZUH_MANAGER='{{ hostvars['monitoring']['ansible_host'] }}'
-          WAZUH_REGISTRATION_SERVER='{{ hostvars['monitoring']['ansible_host'] }}'
-          WAZUH_AGENT_GROUP='default'
+          WAZUH_MANAGER={{ hostvars['monitoring']['ansible_host'] }}
+          WAZUH_REGISTRATION_SERVER={{ hostvars['monitoring']['ansible_host'] }}
+          WAZUH_AGENT_GROUP=default
 
     - name: Start Wazuh
       win_service:
