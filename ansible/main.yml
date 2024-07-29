@@ -13,4 +13,3 @@
 - import_playbook: playbooks/sysmon.yml
 # ad vulns
 - import_playbook: playbooks/vulnerable-ad.yml
-
