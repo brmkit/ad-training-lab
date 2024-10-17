@@ -16,12 +16,15 @@ source "proxmox-iso" "traininglab-ws" {
   node         = var.proxmox_hostname
   username     = var.proxmox_api_id
   token        = var.proxmox_api_token
-  
-  #iso_file     = "local:iso/win10_ltsc.iso" -- uncomment if you want to use local iso file and comment the next four lines
-  iso_checksum             = "sha256:ef7312733a9f5d7d51cfa04ac497671995674ca5e1058d5164d6028f0938d668"
-  iso_url                  = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66750/19045.2006.220908-0225.22h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
-  iso_storage_pool         = "local"
-  iso_download_pve = true
+
+  boot_iso {
+    type = "scsi"
+    iso_url = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66750/19045.2006.220908-0225.22h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
+    unmount = true
+    iso_checksum = "sha256:ef7312733a9f5d7d51cfa04ac497671995674ca5e1058d5164d6028f0938d668"
+    iso_download_pve = true
+    iso_storage_pool = "local"
+  }
 
   communicator             = "ssh"
   ssh_username             = var.lab_username
@@ -35,7 +38,6 @@ source "proxmox-iso" "traininglab-ws" {
   tags                     = "traininglab-ws"
   template_description     = "TrainingLab Workstation Template"
   insecure_skip_tls_verify = true
-  unmount_iso = true
   task_timeout = "30m"
 
   additional_iso_files {

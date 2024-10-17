@@ -16,13 +16,16 @@ source "proxmox-iso" "traininglab-win2019" {
   node         = var.proxmox_hostname
   username     = var.proxmox_api_id
   token        = var.proxmox_api_token
-  
-  #iso_file     = "local:iso/win2019_server.iso" -- uncomment if you want to use local iso file and comment the next four lines
-  iso_checksum             = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
-  iso_url                  = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
-  iso_storage_pool         = "local"
-  iso_download_pve = true
 
+  boot_iso {
+    type = "scsi"
+    iso_url = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
+    unmount = true
+    iso_checksum = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
+    iso_download_pve = true
+    iso_storage_pool = "local"
+  }
+  
   communicator             = "ssh"
   ssh_username             = var.lab_username
   ssh_password             = var.lab_password
@@ -35,7 +38,6 @@ source "proxmox-iso" "traininglab-win2019" {
   tags                     = "traininglab-win2019"
   template_description     = "TrainingLab WindowsServer Template - Sysprep done"
   insecure_skip_tls_verify = true
-  unmount_iso = true
   task_timeout = "30m"
 
   additional_iso_files {
