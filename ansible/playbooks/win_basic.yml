@@ -2,7 +2,7 @@
 ---
 - name: SOME MAGIC...
   hosts: windows
-  gather_facts: no
+  gather_facts: false
   tasks:
   - name: Disable Hibernation 1
     win_regedit:

@@ -1,7 +1,7 @@
 ---
 - name: DEPLOY WAZUH
   hosts: windows
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: Install Wazuh Agent
       win_package:

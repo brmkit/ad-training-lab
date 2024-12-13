@@ -1,7 +1,7 @@
 ---
 - name: CONFIGURING WEBSERVER
   hosts: WEB
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: Rename server
       win_hostname:

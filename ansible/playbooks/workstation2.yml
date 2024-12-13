@@ -1,6 +1,6 @@
 - name: CONFIGURING WORKSTATION 2
   hosts: WS2
-  gather_facts: no
+  gather_facts: false
   tasks:
     - name: Rename server
       win_hostname:
