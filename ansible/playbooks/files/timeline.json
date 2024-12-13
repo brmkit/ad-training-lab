@@ -1,0 +1,184 @@
+{
+    "Status": "Run",
+    "TimeLineHandlers": [
+      {
+        "HandlerType": "Watcher",
+        "Initial": "",
+        "UtcTimeOn": "00:00:00",
+        "UtcTimeOff": "24:00:00",
+        "Loop": true,
+        "TimeLineEvents": [
+          {
+            "Command": "folder",
+            "CommandArgs": [ "path:%HOMEDRIVE%%HOMEPATH%\\Downloads", "size:2000", "deletionApproach:oldest" ],
+            "DelayAfter": 0,
+            "DelayBefore": 0
+          }
+        ]
+      },
+      {
+        "HandlerType": "Command",
+        "Initial": "",
+        "UtcTimeOn": "00:00:00",
+        "UtcTimeOff": "24:00:00",
+        "Loop": "False",
+        "TimeLineEvents": [
+          {
+            "Command": "DIR c:\\",
+            "CommandArgs": [
+            ],
+            "DelayAfter": 900000,
+            "DelayBefore": 0
+          }
+        ]
+      },
+      {
+        "HandlerType": "Command",
+        "Initial": "",
+        "UtcTimeOn": "00:00:00",
+        "UtcTimeOff": "24:00:00",
+        "Loop": "False",
+        "TimeLineEvents": [
+          {
+            "Command": "explorer.exe C:\\Users\\Public\\Documents",
+            "CommandArgs": [
+            ],
+            "DelayAfter": 900000,
+            "DelayBefore": 0
+          }
+        ]
+      },
+      {
+        "HandlerType": "BrowserFirefox",
+        "HandlerArgs": {
+          "isheadless": "false",
+          "blockimages": "false",
+          "blockstyles": "false",
+          "blockflash": "false",
+          "blockscripts": "false",
+          "stickiness": "65",
+          "stickiness-depth-min": "3",
+          "stickiness-depth-max": "15",
+          "incognito": "false",
+          "javascript-enable": "true",
+          "visited-remember": "10",
+          "actions-before-restart": 100,
+          "command-line-args": [ "--ignore-certificate-errors" ],
+          "url-replace": [
+            { "verb": [ "order", "enable", "engage" ] },
+            { "group": [ "operations", "logistics", "medical" ] },
+            { "org": [ "army", "command", "brigade", "battalion" ] },
+            { "type": [ "document", "doc", "files", "vault", "filevault" ] }
+          ]
+        },
+        "Initial": "about:blank",
+        "UtcTimeOn": "00:00:00",
+        "UtcTimeOff": "24:00:00",
+        "UtcTimeBlocks": [ "14:00:00", "17:00:00", "18:00:00", "22:00:00" ],
+        "Loop": "True",
+        "TimeLineEvents": [
+          {
+            "Command": "random",
+            "CommandArgs": [
+              "http://craigslist.org/{org}/{group}/{uuid}/{verb}/{type}/{n}?{c}={now}",
+              "http://www.bbc.co.uk",
+              "http://www.spiegel.de",
+              "http://www.lefigaro.fr",
+              "http://www.lemonde.fr",
+              "http://www.tagesschau.de",
+              "http://www.zeit.de",
+              "http://www.elmundo.es",
+              "http://www.corriere.it",
+              "http://www.elpais.com",
+              "http://www.repubblica.it",
+              "http://www.dailymail.co.uk",
+              "http://www.liberation.fr",
+              "http://www.tanea.gr",
+              "http://www.novayagazeta.ru",
+              "http://www.irishtimes.com",
+              "http://www.vg.no",
+              "http://www.dn.pt",
+              "http://www.publico.pt",
+              "http://www.delo.si",
+              "http://www.reddit.com",
+              "http://www.dailymotion.com",
+              "http://www.tumblr.com",
+              "http://www.weebly.com",
+              "http://www.buzzfeed.com",
+              "http://www.instagram.com",
+              "http://www.snapchat.com",
+              "http://www.okcupid.com",
+              "http://www.hootsuite.com",
+              "http://www.periscope.tv",
+              "http://www.4chan.org",
+              "http://www.zenhabits.net",
+              "http://www.kotaku.com",
+              "http://www.lifehacker.com",
+              "http://www.boingboing.net",
+              "http://www.slate.com",
+              "http://www.popsugar.com",
+              "http://www.jezebel.com",
+              "http://www.mashable.com",
+              "http://www.huffingtonpost.com",
+              "http://www.theguardian.com",
+              "http://www.theverge.com",
+              "http://www.cnet.com",
+              "http://www.gizmodo.com",
+              "http://www.techradar.com",
+              "http://www.engadget.com",
+              "http://www.macrumors.com",
+              "http://www.androidcentral.com",
+              "http://www.wired.com",
+              "http://www.techcrunch.com",
+              "http://www.arstechnica.com",
+              "http://www.zdnet.com",
+              "http://www.autoblog.com",
+              "http://www.caranddriver.com",
+              "http://www.motortrend.com",
+              "http://www.topgear.com",
+              "http://www.jalopnik.com",
+              "http://www.edmunds.com",
+              "http://www.autotrader.co.uk",
+              "http://www.autoscout24.com",
+              "http://www.carbuyer.co.uk",
+              "http://www.kbb.com",
+              {
+                "Uri": "http://httpbin.org/post",
+                "Category": "cat1",
+                "Method": "POST",
+                "Headers": {
+                  "1": "a",
+                  "2": "b"
+                },
+                "FormValues": {
+                  "1": "a",
+                  "2": "b"
+                }
+              },
+              {
+                "Uri": "http://httpbin.org/put",
+                "Category": "cat1",
+                "Method": "PUT",
+                "Headers": {
+                  "1": "a",
+                  "2": "b"
+                },
+                "Body": "body"
+              },
+              {
+                "Uri": "http://httpbin.org/delete",
+                "Category": "cat1",
+                "Method": "DELETE"
+              }
+            ],
+            "DelayAfter": {
+              "random": true,
+              "min": 5000,
+              "max": 3000000
+            },
+            "DelayBefore": 0
+          }
+        ]
+      }
+    ]
+  }

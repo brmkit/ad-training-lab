@@ -25,6 +25,11 @@
         state: domain
         reboot: true
 
+    - name: Set autologon for specific user
+      community.windows.win_auto_logon:
+        username: '{{ first_user_login }}'
+        password: '{{ first_user_password }}'
+
     - name: Allow RDP to specific users
       ansible.windows.win_user_right:
         name: SeRemoteInteractiveLogonRight
