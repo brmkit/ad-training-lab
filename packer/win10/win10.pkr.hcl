@@ -18,7 +18,7 @@ source "proxmox-iso" "traininglab-ws" {
   token        = var.proxmox_api_token
 
   boot_iso {
-    type            = "scsi"
+    type            = "ide"
     iso_url         = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66750/19045.2006.220908-0225.22h2_release_svc_refresh_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso"
     unmount         = true
     iso_checksum    = "sha256:ef7312733a9f5d7d51cfa04ac497671995674ca5e1058d5164d6028f0938d668"
@@ -48,11 +48,12 @@ source "proxmox-iso" "traininglab-ws" {
   }
 
   additional_iso_files {
-    device           = "sata0"
+    type           = "sata"
     iso_url          = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso"
-    iso_checksum     = "none"
+    iso_checksum     = "sha256:57b0f6dc8dc92dc2ae8621f8b1bfbd8a873de9bedc788c4c4b305ea28acc77cd"
     iso_storage_pool = "local"
     unmount          = true
+    iso_download_pve = true
   }
 
   network_adapters {
@@ -63,9 +64,6 @@ source "proxmox-iso" "traininglab-ws" {
     type          = "scsi"
     disk_size     = "50G"
     storage_pool  = var.storage_name
-    discard       = true
-    io_thread     = true
-    format        = "raw"
   }
 
   scsi_controller = "virtio-scsi-single"

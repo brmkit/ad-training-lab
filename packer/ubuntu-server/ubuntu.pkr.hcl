@@ -30,12 +30,12 @@ source "proxmox-iso" "traininglab-server" {
   boot_wait               = "10s"
 
   boot_iso {
-    type             = "scsi"
-    iso_url          = "https://releases.ubuntu.com/22.04.4/ubuntu-22.04.4-live-server-amd64.iso"
+    type             = "ide"
+    iso_url          = "https://releases.ubuntu.com/24.04.1/ubuntu-24.04.1-live-server-amd64.iso"
     unmount          = true
-    iso_checksum     = "sha256:45f873de9f8cb637345d6e66a583762730bbea30277ef7b32c9c3bd6700a32b2"
-    iso_download_pve = true
+    iso_checksum     = "sha256:e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
     iso_storage_pool = "local"
+    iso_download_pve = true
   }
 
   additional_iso_files {
@@ -56,31 +56,13 @@ source "proxmox-iso" "traininglab-server" {
     disk_size    = "30G"
     storage_pool = var.storage_name
     type         = "scsi"
-    discard      = true
-    io_thread    = true
-    format       = "raw"
   }
-
+  
   boot_command = [
-    "<esc><esc><esc><esc>e<wait>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del>",
-    "<del><del><del><del><del><del><del><del><del>",
-    "linux /casper/vmlinuz --- autoinstall s=/cidata/<enter><wait>",
-    "initrd /casper/initrd<enter><wait>",
-    "boot<enter>",
-    "<enter><f10><wait>"
+    "c", "<wait3s>",
+    "linux /casper/vmlinuz --- autoinstall s=/cidata/", "<enter><wait3s>",
+    "initrd /casper/initrd", "<enter><wait3s>",
+    "boot", "<enter>"
   ]
 }
 
