@@ -60,6 +60,13 @@
       datatype: dword
       state: present
       
+  - name: Disable ms_tcpip6 of every Interface
+    community.windows.win_net_adapter_feature:
+      interface: '*'
+      state: disabled
+      component_id:
+        - ms_tcpip6  
+
   - name: Reboot before domain creation
     win_reboot:
     when: deactive.changed

@@ -3,20 +3,20 @@
   hosts: WS1, WS2
   gather_facts: false
   tasks:
-    - name: Create a temp directory
-      win_file:
-        path: C:\temp
-        state: directory
-
+# check link here -> https://github.com/cmu-sei/GHOSTS/releases
     - name: Download GHOSTS framework
       win_get_url:
         url: "https://cmu.box.com/shared/static/kqo5cl7f5f2v22xgud6o2fd26xrrwtpq.zip"
-        dest: "C:\\temp\\ghosts.zip"
+        dest: C:\ghosts.zip
 
     - name: Unzip GHOSTS framework
       win_unzip:
-        src: "C:\\tmp\\ghosts.zip"
-        dest: "C:\\ghosts"
+        src: C:\ghosts.zip
+        dest: C:\
+        delete_archive: true
+
+    - name: Rename folder
+      win_shell: mv C:\ghosts-* C:\ghosts
 
     - name: Install Firefox
       win_chocolatey:
@@ -26,23 +26,24 @@
     - name: Downloads geckodriver
       win_get_url:
         url: "https://github.com/mozilla/geckodriver/releases/download/v0.35.0/geckodriver-v0.35.0-win64.zip"
-        dest: "C:\\temp\\geckodriver.zip"
+        dest: C:\geckodriver.zip
 
     - name: Unzip geckodriver
       win_unzip:
-        src: "C:\\temp\\geckodriver.zip"
-        dest: "C:\\ghosts"
-        force: yes
-    
+        src: C:\geckodriver.zip
+        dest: C:\ghosts\
+        delete_archive: true
+            
     - name: Use a custom timeline
       win_copy:
         src: files/timeline.json
-        dest: "C:\\ghosts\\config\\timeline.json"
+        dest: C:\ghosts\config\timeline.json
         force: yes
 
     - name: Create a shortcut file - GHOSTS
-      src: C:\ghosts\ghosts.exe
-      dest: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\ghosts.lnk
+      win_shortcut:
+        src: C:\ghosts\ghosts.exe
+        dest: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\ghosts.lnk
 
     - name: Reboot to start GHOSTS
       win_reboot:

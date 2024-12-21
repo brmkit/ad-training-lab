@@ -96,7 +96,7 @@ Below are the credentials used in the environment:
 - [x] add ADCS template and basic ansible configuration
 - [ ] implement some basic ESCx
 - [ ] move monitoring on elk + elastic_agent (?)
-- [ ] add user simulation ([GHOSTS](https://github.com/cmu-sei/GHOSTS) or similar).
+- [x] add user simulation ([GHOSTS](https://github.com/cmu-sei/GHOSTS) or similar).
 
 ## Acknowledgments
 - [Packer Plugin for Windows Update](https://github.com/rgl/packer-plugin-windows-update): An indispensable plugin for managing the operating system update before creating the template.
