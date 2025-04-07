@@ -1,0 +1,31 @@
+---
+- name: CONFIGURING LDAPFW FOR RESEARCH PURPOSES
+  hosts: DC
+  gather_facts: false
+  tasks:
+    - name: Install prerequisites for ldapfw
+      ansible.windows.win_powershell:
+        script: |
+          wget https://aka.ms/vs/17/release/vc_redist.x64.exe -outfile C:\Windows\Temp\vc_redist.x64.exe;
+          Start-Process -FilePath C:\Windows\Temp\vc_redist.x64.exe -ArgumentList '/install /passive /norestart'
+    
+    - name: Install ldapfw
+      ansible.windows.win_powershell:
+        script: |
+          mkdir C:\ldapfw\
+          wget https://github.com/zeronetworks/ldapfw/releases/download/v1.0.0/ldapfw_v1.0.0-x64.zip -outfile C:\Windows\Temp\ldapfw.zip
+          Expand-Archive -Path C:\Windows\Temp\ldapfw.zip -DestinationPath C:\ldapfw\
+  
+    - name: upload config File
+      ansible.windows.win_template:
+        src: files/ldapfw_config.json.j2
+        dest: C:\ldapfw\config.json
+        force: yes
+    
+    - name: start ldapfw
+      ansible.windows.win_powershell:
+        script: |
+          Start-Process -FilePath C:\ldapfw\ldapFwManager.exe -ArgumentList '/install'
+      become: true
+      become_method: runas
+      become_user: SYSTEM
