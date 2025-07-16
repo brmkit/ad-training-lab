@@ -1,6 +1,6 @@
 ---
 - name: CONFIGURING LDAPFW FOR RESEARCH PURPOSES
-  hosts: DC
+  hosts: DC01
   gather_facts: false
   tasks:
     - name: Install prerequisites for ldapfw

@@ -55,6 +55,20 @@ pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin 
 *BONUS: check the files and modify network or storage name if needed.
 The lab is currently deployed on storage **local-lvm** and network bridge **vmbr1**.*
 
+## Ludus fans
+To start using Ludus, simply clone this repository and launch:
+```bash
+git clone <repo>
+ludus range config set -f ludus/config.yml
+```
+
+When finished:
+```bash
+chmod +x ludus/start-ansible.sh
+./ludus/start-ansible.sh
+```
+
+
 ## Lab Overview
 
 ### Infrastructure

@@ -1,0 +1,62 @@
+ludus:
+  - vm_name: "{{ range_id }}-DC01"
+    hostname: "{{ range_id }}-DC01"
+    template: win2022-server-x64-template
+    vlan: 10
+    ip_last_octet: 100
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-ADCS"
+    hostname: "{{ range_id }}-ADCS"
+    template: win2022-server-x64-template
+    vlan: 10
+    ip_last_octet: 110
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-FS"
+    hostname: "{{ range_id }}-FS"
+    template: win2019server-x64-template
+    vlan: 10
+    ip_last_octet: 130
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true    
+  - vm_name: "{{ range_id }}-WEB"
+    hostname: "{{ range_id }}-WEB"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 135
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-WS1"
+    hostname: "{{ range_id }}-WS1"
+    template: win10-desktop-x64-template
+    vlan: 10
+    ip_last_octet: 145
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-WS2"
+    hostname: "{{ range_id }}-WS2"
+    template: win10-desktop-x64-template
+    vlan: 10
+    ip_last_octet: 146
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-monitoring"
+    hostname: "{{ range_id }}-monitoring"
+    template: ubuntu-24.04-x64-server
+    vlan: 10
+    ip_last_octet: 200
+    ram_gb: 2
+    cpus: 2

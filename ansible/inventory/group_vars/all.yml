@@ -1,4 +1,3 @@
-ansible_connection: ssh
 dns_forwarders: 1.1.1.1
 
 domain_short: RED

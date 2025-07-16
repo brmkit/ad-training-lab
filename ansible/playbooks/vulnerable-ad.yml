@@ -1,6 +1,6 @@
 ---
 - name: MISCONFIGURING AD
-  hosts: DC
+  hosts: DC01
   gather_facts: false
   tasks:
     - name: Running Vulnerable-AD script 
