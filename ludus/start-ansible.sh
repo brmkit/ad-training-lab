@@ -1,6 +1,6 @@
-export LUDUSRANGENUMBER=$(ludus range list --json | jq '.LUDUSRANGE')
-sed -i "s/LUDUSRANGENUMBER/$LUDUSRANGENUMBER/g" inventory.yml
-cp hosts.yml ../ansible/invventory/hosts.yml
+export LUDUSRANGENUMBER=$(ludus range list --json | jq '.rangeNumber')
+sed -i "s/LUDUSRANGENUMBER/$LUDUSRANGENUMBER/g" hosts.yml
+cp hosts.yml ../ansible/inventory/hosts.yml
 
 cd ../ansible
 ansible-playbook main.yml
