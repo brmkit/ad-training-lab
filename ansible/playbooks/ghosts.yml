@@ -17,6 +17,7 @@
 
     - name: Rename folder
       win_shell: mv C:\ghosts-* C:\ghosts
+      ignore_errors: true
 
     - name: Install Firefox
       win_chocolatey:
@@ -46,6 +47,6 @@
         dest: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\ghosts.lnk
 
     - name: Reboot to start GHOSTS
-      win_reboot:
-        reboot_timeout: 60
-        msg: "Rebooting to start GHOSTS framework"
+      ansible.windows.win_reboot:
+        reboot_timeout: 600
+        connect_timeout: 30

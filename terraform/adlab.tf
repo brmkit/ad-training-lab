@@ -50,7 +50,7 @@ locals {
 resource "proxmox_virtual_environment_vm" "vm" {
   for_each = {
     monitoring = local.vm_id_templates.ubuntu
-    DC         = local.vm_id_templates.win2019
+    DC01         = local.vm_id_templates.win2019
     ADCS       = local.vm_id_templates.win2019
     FS         = local.vm_id_templates.win2019
     WEB        = local.vm_id_templates.win2019

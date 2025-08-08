@@ -16,7 +16,7 @@
       win_dns_client:
         adapter_names: '*'
         dns_servers:
-        - "{{ hostvars['DC']['ansible_host'] }}"
+        - "{{ hostvars['DC01']['ansible_host'] }}"
 
     - name: Join Domain
       microsoft.ad.membership:
@@ -31,6 +31,12 @@
         name: SeRemoteInteractiveLogonRight
         users:
         - Administrators
+    
+    - name: Ensure Windows Update service is enabled
+      win_service:
+        name: wuauserv
+        start_mode: manual
+        state: started
     
     - name: Install IIS Web-Server
       win_feature:

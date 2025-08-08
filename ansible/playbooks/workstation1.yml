@@ -15,7 +15,7 @@
       win_dns_client:
         adapter_names: '*'
         dns_servers:
-        - "{{ hostvars['DC']['ansible_host'] }}"
+        - "{{ hostvars['DC01']['ansible_host'] }}"
       
     - name: Join Domain
       microsoft.ad.membership:
@@ -36,13 +36,18 @@
         users:
         - Administrators
         - Remote Desktop Users
-
+      
     - name: Map shared folder
-      community.windows.win_mapped_drive:
-        letter: 'Z'
-        path: \\fs.{{ domain_name }}\SharedFolder
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+        name: MapDriveZ
+        data: 'net use Z: "\\fs.{{ domain_name }}\SharedFolder" /persistent:yes'
+        type: string
         state: present
-        
+      become: true
+      become_method: runas
+      become_user: SYSTEM
+
     - name: Misconfiguration - Add user to rdp group
       win_group_membership:
         name: Remote Desktop Users

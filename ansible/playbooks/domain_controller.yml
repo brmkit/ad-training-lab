@@ -1,6 +1,6 @@
 ---
 - name: CONFIGURING DOMAIN CONTROLLER
-  hosts: DC
+  hosts: DC01
   gather_facts: false
   tasks:
     - name: Rename server

@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+ludus:
+  - vm_name: "TRAINING-DC01"
+    hostname: "DC01"
+    template: win2022-server-x64-us-template
+    vlan: 10
+    ip_last_octet: 100
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "TRAINING-ADCS"
+    hostname: "ADCS"
+    template: win2022-server-x64-us-template
+    vlan: 10
+    ip_last_octet: 110
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "TRAINING-FS"
+    hostname: "FS"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 130
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true    
+  - vm_name: "TRAINING-WEB"
+    hostname: "WEB"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 135
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "TRAINING-WS1"
+    hostname: "WS1"
+    template: win10-22h2-x64-enterprise-template
+    vlan: 10
+    ip_last_octet: 145
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "TRAINING-WS2"
+    hostname: "WS2"
+    template: win10-22h2-x64-enterprise-template
+    vlan: 10
+    ip_last_octet: 146
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "TRAINING-monitoring"
+    hostname: "monitoring"
+    template: ubuntu-24.04-x64-server-template
+    vlan: 10
+    ip_last_octet: 200
+    ram_gb: 4
+    cpus: 2
+    linux: true

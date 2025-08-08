@@ -70,7 +70,7 @@
       git:
         repo: 'https://github.com/wazuh/wazuh-docker.git'
         dest: "/home/{{ ansible_user }}/wazuh-docker"
-        version: stable
+        version: 4.4
         force: true
 
     - name: Creating agent.conf file
