@@ -16,7 +16,7 @@
       win_dns_client:
         adapter_names: '*'
         dns_servers:
-        - "{{ hostvars['DC']['ansible_host'] }}"
+        - "{{ hostvars['DC01']['ansible_host'] }}"
 
     - name: Join Domain
       microsoft.ad.membership:

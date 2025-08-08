@@ -38,7 +38,7 @@ ludus:
       sysprep: true
   - vm_name: "TRAINING-WS1"
     hostname: "WS1"
-    template: win11-22h2-x64-enterprise-template
+    template: win10-22h2-x64-enterprise-template
     vlan: 10
     ip_last_octet: 145
     ram_gb: 4

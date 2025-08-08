@@ -27,6 +27,24 @@ or... use your money :sweat_smile:
 - [VulnLab](https://www.vulnlab.com/)
 
 ## Getting started
+
+### The Ludus way
+To deploy this lab using [Ludus](https://ludus.cloud/), all you need to do is:
+```bash
+cd ludus
+chmod +x start-ansible.sh
+ludus range config set -f config.yml
+ludus range deploy
+# just wait - destroy and re-deploy if any error occurs
+```
+
+Once everything's up and running execute `start-ansible.sh` and just follow the instructions from there. Easy.
+
+_yeah... that's why everyone loves [Ludus](https://ludus.cloud/)_
+
+### The old way -> or just proxmox
+If you want to build this training lab on a simple Proxmox setup, you can still follow the "_old way_". It’s "_old_" just because I’ve switched my environment to use [Ludus](https://ludus.cloud/) exclusively and, honestly, it’s the best setup for my current needs.
+
 ### Prerequisite
 1. a Proxmox server
 2. sufficient space on `local-lvm` (~200GB)
@@ -41,7 +59,7 @@ pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin 
 ```
 **you have to save the output somewhere, you need this!**
 
-### Deploy
+#### Deploy
 1. Create a VM (ubuntu-desktop) inside your Proxmox hosts and ssh into it
 2. `git clone <repo>` 
 3. `cd ad-training-lab`
@@ -54,20 +72,6 @@ pveum aclmod /storage/local --user userprovisioner@pve --role PVEDatastoreAdmin 
 
 *BONUS: check the files and modify network or storage name if needed.
 The lab is currently deployed on storage **local-lvm** and network bridge **vmbr1**.*
-
-## Ludus fans
-To start using Ludus, simply clone this repository and launch:
-```bash
-git clone <repo>
-ludus range config set -f ludus/config.yml
-```
-
-When finished:
-```bash
-chmod +x ludus/start-ansible.sh
-./ludus/start-ansible.sh
-```
-
 
 ## Lab Overview
 

@@ -40,3 +40,9 @@ terraform.rc
 .history
 .ionide
 .vscode/settings.json
+
+### other
+ansible/inventory/hosts.yml
+ludus/training-wg.conf
+.DS_Store
+ansible/inventory/hosts.yml.backup

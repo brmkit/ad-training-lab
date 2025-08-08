@@ -14,3 +14,4 @@
 # ad vulns
 - import_playbook: playbooks/vulnerable-ad.yml
 - import_playbook: playbooks/ghosts.yml
+- import_playbook: playbooks/ldap_research.yml
